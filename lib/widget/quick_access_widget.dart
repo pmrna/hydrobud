@@ -15,9 +15,11 @@ class _QuickAccessWidgetState extends State<QuickAccessWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.width / 0.95,
+      height: MediaQuery.of(context).size.width / 1,
       decoration: BoxDecoration(
-          color: secondaryColor, borderRadius: BorderRadius.circular(10)),
+        color: secondaryColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Column(
         children: [
           Align(

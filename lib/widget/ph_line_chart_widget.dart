@@ -12,197 +12,342 @@ class pHLineChart extends StatefulWidget {
 class _pHLineChartState extends State<pHLineChart> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundGraphColor,
-          border: Border.all(
-            width: 2.5,
-            color: borderGraphColor,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 20,
+            right: 10,
+            left: 10,
           ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
+          child: Container(
+            decoration: BoxDecoration(
+                color: graphBackgroundColor,
+                border: Border.all(
+                  color: graphLineColor,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 25,
+                    left: 25,
+                    top: 5,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'pH Level',
+                          style: TextStyle(
+                            color: primaryTextColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              '1.00',
+                              style: TextStyle(
+                                color: primaryTextColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              'Today, 11:59 AM',
+                              style: TextStyle(
+                                color: primaryTextColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                const Divider(
+                  height: 1.5,
+                  thickness: 2,
+                  indent: 20,
+                  endIndent: 20,
+                  color: dividerColor,
+                ),
+                AspectRatio(
+                  aspectRatio: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 12,
+                    ),
+                    child: LineChart(
+                      LineChartData(
+                        lineTouchData: const LineTouchData(enabled: false),
+                        lineBarsData: [
+                          LineChartBarData(
+                            isCurved: false,
+                            isStepLineChart: true,
+                            barWidth: 4,
+                            color: pHBarLineColor,
+                            shadow: Shadow(
+                                color: pHBarLineShadowColor,
+                                offset: Offset(2, 2),
+                                blurRadius: 10.0),
+                            spots: const [
+                              FlSpot(0, 0),
+                              FlSpot(1, 1.2),
+                              FlSpot(2, 4.5),
+                              FlSpot(3, 6.0),
+                              FlSpot(4, 5.5),
+                              FlSpot(5, 1.0),
+                              FlSpot(6, 0),
+                            ],
+                            belowBarData: BarAreaData(
+                              show: true,
+                              gradient: LinearGradient(
+                                colors: [
+                                  pHTertiaryGradientColor,
+                                  pHSecondaryGradientColor,
+                                  pHPrimaryGradientColor,
+                                ],
+                                transform: GradientRotation(60.0),
+                                stops: [
+                                  0.3,
+                                  0.6,
+                                  0.9,
+                                ],
+                                begin: Alignment.bottomRight,
+                                end: Alignment.topLeft,
+                              ),
+                            ),
+                            dotData: FlDotData(
+                              show: true,
+                            ),
+                          ),
+                        ],
+                        minY: 0,
+                        borderData: FlBorderData(
+                          show: true,
+                          border: Border(
+                            top: BorderSide.none,
+                            right: BorderSide.none,
+                            left: BorderSide(
+                              color: graphBorderLineColor,
+                              width: 2,
+                            ),
+                            bottom: BorderSide(
+                              color: graphBorderLineColor,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                        gridData: FlGridData(show: false),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              reservedSize: 15,
+                              showTitles: true,
+                              getTitlesWidget: getHackTitles,
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            axisNameWidget: Text(
+                              'Time',
+                              style: TextStyle(
+                                color: primaryTextColor,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 12,
+                              ),
+                            ),
+                            sideTitles: SideTitles(
+                                reservedSize: 30,
+                                showTitles: true,
+                                getTitlesWidget: getBottomTitles),
+                          ),
+                          leftTitles: AxisTitles(
+                            axisNameWidget: Text(
+                              'Value',
+                              style: TextStyle(
+                                color: primaryTextColor,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 12,
+                              ),
+                            ),
+                            sideTitles: SideTitles(
+                                reservedSize: 25,
+                                showTitles: true,
+                                getTitlesWidget: getLeftTitles,
+                                interval: 1),
+                          ),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                                reservedSize: 20,
+                                showTitles: true,
+                                getTitlesWidget: getHackTitles),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                )
+              ],
+            ),
           ),
         ),
-        child: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  top: 10,
-                ),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 25,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border.all(
+                color: borderColor,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: 50,
+                  child: Center(
+                    child: Text(
+                      '1H',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
                   decoration: BoxDecoration(
-                    color: Colors.transparent,
                     border: Border(
                       top: BorderSide.none,
                       left: BorderSide.none,
-                      right: BorderSide.none,
-                      bottom: BorderSide(
-                        width: 1,
-                        color: Colors.white,
+                      bottom: BorderSide.none,
+                      right: BorderSide(
+                        width: 2,
+                        color: borderColor,
                       ),
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'pH',
-                        style: TextStyle(
-                            fontSize: 23,
-                            fontWeight: FontWeight.w400,
-                            color: outlineColor),
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '1.00',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: outlineColor),
-                          ),
-                          Text(
-                            'Today, 12:00',
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                                color: outlineColor),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
                 ),
-              ),
-            ),
-            Expanded(
-              flex: 4,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  right: 15,
-                  top: 15,
-                  bottom: 15,
-                  left: 15,
-                ),
-                child: LineChart(
-                  LineChartData(
-                    lineTouchData: const LineTouchData(enabled: false),
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: const [
-                          FlSpot(0, 0),
-                          FlSpot(1, 1.24),
-                          FlSpot(2, 4.0),
-                          FlSpot(3, 4.5),
-                          FlSpot(4, 5.5),
-                          FlSpot(5, 6.0),
-                          FlSpot(6, 1.0),
-                        ],
-                        shadow: Shadow(
-                          color: Colors.green.shade900,
-                          offset: Offset(3, 3),
-                        ),
-                        isCurved: false,
-                        isStepLineChart: true,
-                        barWidth: 4,
-                        color: Colors.greenAccent.shade700,
-                        belowBarData: BarAreaData(
-                          show: true,
-                          color: Colors.green.shade500,
-                        ),
-                        dotData: const FlDotData(
-                          show: true,
-                        ),
+                Container(
+                  width: 50,
+                  child: Center(
+                    child: Text(
+                      '4H',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 14,
                       ),
-                    ],
-                    minY: 0,
-                    minX: 0,
-                    //maxY: 10,   //can be used to display mins,hours, etc. : 4h,12h, 24h, etc.
-                    //maxX: 10,   //can be used to display mins,hours, etc. : 4h,12h, 24h, etc.
-                    titlesData: FlTitlesData(
-                      show: true,
-                      rightTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false)),
-                      topTitles: AxisTitles(
-                        sideTitles: const SideTitles(
-                          showTitles: false,
-                        ),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 18,
-                          getTitlesWidget: getBottomTitles,
-                        ),
-                        axisNameWidget: Text(
-                          'Time',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          interval: 1,
-                          reservedSize: 20,
-                          getTitlesWidget: getLeftTitles,
-                        ),
-                        axisNameWidget: Text(
-                          'Value',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    borderData: FlBorderData(
-                      show: true,
-                      border: Border(
-                        left: BorderSide.none,
-                        right: BorderSide.none,
-                        top: BorderSide(
-                          color: Colors.white,
-                          width: 1,
-                        ),
-                        bottom: BorderSide(
-                          color: Colors.white,
-                          width: 1,
-                        ),
-                      ),
-                    ),
-                    gridData: FlGridData(
-                      show: true,
-                      drawVerticalLine: false,
-                      horizontalInterval: 1,
                     ),
                   ),
-                ),
-              ),
-            ),
-            Expanded(
-                flex: 1,
-                child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.red,
+                    border: Border(
+                      top: BorderSide.none,
+                      left: BorderSide.none,
+                      bottom: BorderSide.none,
+                      right: BorderSide(
+                        width: 2,
+                        color: borderColor,
+                      ),
+                    ),
                   ),
-                ))
-          ],
+                ),
+                Container(
+                  width: 50,
+                  child: Center(
+                    child: Text(
+                      '6H',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide.none,
+                      left: BorderSide.none,
+                      bottom: BorderSide.none,
+                      right: BorderSide(
+                        width: 2,
+                        color: borderColor,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 50,
+                  child: Center(
+                    child: Text(
+                      '12H',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide.none,
+                      left: BorderSide.none,
+                      bottom: BorderSide.none,
+                      right: BorderSide(
+                        width: 2,
+                        color: borderColor,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 50,
+                  child: Center(
+                    child: Text(
+                      '24H',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                        top: BorderSide.none,
+                        left: BorderSide.none,
+                        bottom: BorderSide.none,
+                        right: BorderSide.none),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 
   Widget getBottomTitles(double value, TitleMeta meta) {
     const style = TextStyle(
-      color: textLineGraphColor,
-      fontWeight: FontWeight.bold,
-      fontSize: 12,
+      color: textGraphColor,
+      fontWeight: FontWeight.w900,
+      fontSize: 13,
     );
     String bottomText;
     switch (value.toInt()) {
@@ -232,11 +377,12 @@ class _pHLineChartState extends State<pHLineChart> {
     }
     return SideTitleWidget(
       axisSide: meta.axisSide,
+      space: 10,
       fitInside: SideTitleFitInsideData.fromTitleMeta(
         meta,
-        distanceFromEdge: -10,
+        enabled: true,
+        distanceFromEdge: -16,
       ),
-      space: 10,
       child: Text(
         bottomText,
         style: style,
@@ -246,9 +392,9 @@ class _pHLineChartState extends State<pHLineChart> {
 
   Widget getLeftTitles(double value, TitleMeta meta) {
     const style = TextStyle(
-      color: textLineGraphColor,
-      fontWeight: FontWeight.bold,
-      fontSize: 12,
+      color: textGraphColor,
+      fontWeight: FontWeight.w900,
+      fontSize: 13,
     );
     String leftText;
     if (value == 0) {
@@ -270,12 +416,15 @@ class _pHLineChartState extends State<pHLineChart> {
     }
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      fitInside: SideTitleFitInsideData.fromTitleMeta(
-        meta,
-        distanceFromEdge: -10,
-      ),
       space: 10,
       child: Text(leftText, style: style),
     );
   }
+
+  Widget getHackTitles(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: Colors.transparent,
+    );
+    return Text('hack', style: style);
+  } // a hack for titles: fixed stupid text clipping when not showing a title side.
 }
