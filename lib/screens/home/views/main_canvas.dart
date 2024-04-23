@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/constants/colors.dart';
 import 'package:hydrobud/widget/quick_access_widget.dart';
+import 'package:hydrobud/widget/horizontal_list_view.dart';
 
 class MainCanvas extends StatelessWidget {
   const MainCanvas({super.key});
@@ -36,7 +37,7 @@ class MainCanvas extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                      width: 10,
+                        width: 10
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +72,7 @@ class MainCanvas extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Row(
+            Row(            // dito mag start
               children: [
                 Icon(
                   Icons.water,
@@ -90,9 +91,17 @@ class MainCanvas extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(
+                height: 10
+            ),
+            Expanded(
+                child:HorizontalListView(),
+            ),
           ],
         ),
       ),
     );
+
+
   }
 }
