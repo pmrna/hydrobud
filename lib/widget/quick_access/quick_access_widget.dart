@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hydrobud/widget/ppm_line_chart/ppm_line_chart_widget.dart';
 
-import '../constants/colors.dart';
-import 'ph_line_chart_widget.dart';
+import '../../constants/colors.dart';
 
 class QuickAccessWidget extends StatefulWidget {
   const QuickAccessWidget({super.key});
@@ -38,7 +38,7 @@ class _QuickAccessWidgetState extends State<QuickAccessWidget> {
                       width: 7,
                     ),
                   ),
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
                     bottomLeft: Radius.circular(12),
@@ -85,7 +85,7 @@ class _QuickAccessWidgetState extends State<QuickAccessWidget> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         Stack(
@@ -97,7 +97,9 @@ class _QuickAccessWidgetState extends State<QuickAccessWidget> {
                                 color: Colors.transparent,
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                    color: Colors.yellow.shade600, width: 4),
+                                  color: ppmAccentColor,
+                                  width: 4,
+                                ),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8),
@@ -123,7 +125,7 @@ class _QuickAccessWidgetState extends State<QuickAccessWidget> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         Stack(
@@ -163,7 +165,7 @@ class _QuickAccessWidgetState extends State<QuickAccessWidget> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         Stack(
@@ -207,8 +209,8 @@ class _QuickAccessWidgetState extends State<QuickAccessWidget> {
               ),
             ),
           ),
-          Expanded(
-            child: pHLineChart(),
+          const Expanded(
+            child: PpmLineChart(),
           ),
         ],
       ),
