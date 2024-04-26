@@ -21,21 +21,34 @@ const borderShadowColor = Color(0xFF474649); // Davy's Gray
 
 Color outlineColor = Colors.grey.shade100;
 Color outlineHighlightColor = Colors.white;
-
-// ---- Graph colors ---- //
-const graphBackgroundColor = Color(0xFF099A4F); // Shamrock Green
-const graphLineColor = Color(0xFF2BF38B); // Spring Green
-const graphBorderLineColor = Color(0xFFA9B4C2); // Powder Blue
 const textGraphColor = Color(0xFFF7F9F9); // Seasalt
-const primaryTextColor = Color(0xFFE6E6E9); // Platinum
+const primaryTextColor = Color(0xFFF5F5F4); // White Smoke
 
-// ---- pH Graph Color ---- //
+// ---- Quick access circle colors ---- //
+
+const pHAccentColor = Color(0xFF0BC169); //Emerald
+const ppmAccentColor = Color(0xFFFFE51F); //Canary
+
+// ---- pH Graph colors ---- //
+const pHGraphBackgroundColor = Color(0xFF099A4F); // Shamrock Green
+const pHGraphLineColor = Color(0xFF2BF38B); // Spring Green
+const pHGraphBorderLineColor = Color(0xFFA9B4C2); // Powder Blue
+
+// ---- ppm Graph colors ---- //
+const ppmpHGraphBackgroundColor = Color(0xFFEAA70B); // Xanthous
+const ppmpHGraphLineColor = Color(0xFFFFDE0A); // Mikado yellow
+const ppmGraphBorderLineColor = Color(0xFFA9B4C2); // Powder Blue
+
+// ---- pH Line colors ---- //
 const pHPrimaryGradientColor = Color(0xFF0B2C24); //Dark Green
 const pHSecondaryGradientColor = Color(0xFF185439); // Castleton Green
 const pHTertiaryGradientColor = Color(0xFF247A4D); //Dark Spring Green
 const pHBarLineColor = Color(0xFF53FF45); //Erin
 const pHBarLineShadowColor = Color(0xFF61BD8C); // Mint
 
-// ---- Quick access circle colors ---- //
-
-const pHAccentColor = Color(0xFF0BC169); //Emerald
+// ---- ppm Line colors ---- //
+const ppmPrimaryGradientColor = Color(0xFFB88100); // Dark Goldenrod
+const ppmSecondaryGradientColor = Color(0xFFE09D00); // Gold Metallic
+const ppmTertiaryGradientColor = Color(0xFFFFB60A); //Sunglow
+const ppmBarLineColor = Color(0xFFFFD20A); // Gold
+const ppmBarLineShadowColor = Color(0xFF7A6400); // Field Drab

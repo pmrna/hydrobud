@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/constants/colors.dart';
-import 'package:hydrobud/widget/quick_access_widget.dart';
+import 'package:hydrobud/widget/quick_access/quick_access_widget.dart';
 import 'package:hydrobud/widget/horizontal_list_view.dart';
 
 class MainCanvas extends StatelessWidget {
@@ -36,8 +36,8 @@ class MainCanvas extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(
-                        width: 10
+                    const SizedBox(
+                      width: 10,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,23 +62,25 @@ class MainCanvas extends StatelessWidget {
                     ),
                   ],
                 ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.menu_rounded))
+                IconButton(
+                    onPressed: () {}, icon: const Icon(Icons.menu_rounded))
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            QuickAccessWidget(),
-            SizedBox(
+            const QuickAccessWidget(),
+            const SizedBox(
               height: 20,
             ),
-            Row(            // dito mag start
+            Row(
+              // dito mag start
               children: [
-                Icon(
+                const Icon(
                   Icons.water,
                   size: 20,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 8,
                 ),
                 Text(
@@ -91,17 +93,13 @@ class MainCanvas extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-                height: 10
-            ),
+            SizedBox(height: 10),
             Expanded(
-                child:HorizontalListView(),
+              child: HorizontalListView(),
             ),
           ],
         ),
       ),
     );
-
-
   }
 }
