@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/constants/colors.dart';
-import 'package:hydrobud/widget/quick_access_widget.dart';
+import 'package:hydrobud/widget/quick_access/quick_access_widget.dart';
+import 'package:hydrobud/widget/horizontal_list_view.dart';
 
 class MainCanvas extends StatelessWidget {
   const MainCanvas({super.key});
@@ -35,7 +36,7 @@ class MainCanvas extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Column(
@@ -61,23 +62,24 @@ class MainCanvas extends StatelessWidget {
                     ),
                   ],
                 ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.menu_rounded))
+                IconButton(
+                    onPressed: () {}, icon: const Icon(Icons.menu_rounded))
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            QuickAccessWidget(),
-            SizedBox(
+            const QuickAccessWidget(),
+            const SizedBox(
               height: 20,
             ),
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.water,
                   size: 20,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 8,
                 ),
                 Text(
@@ -89,6 +91,10 @@ class MainCanvas extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 10),
+            const Expanded(
+              child: HorizontalListView(),
             ),
           ],
         ),

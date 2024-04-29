@@ -2,14 +2,14 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrobud/constants/colors.dart';
 
-class pHLineChart extends StatefulWidget {
-  const pHLineChart({super.key});
+class PpmLineChart extends StatefulWidget {
+  const PpmLineChart({super.key});
 
   @override
-  State<pHLineChart> createState() => _pHLineChartState();
+  State<PpmLineChart> createState() => _PpmLineChart();
 }
 
-class _pHLineChartState extends State<pHLineChart> {
+class _PpmLineChart extends State<PpmLineChart> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,16 +23,24 @@ class _pHLineChartState extends State<pHLineChart> {
           ),
           child: Container(
             decoration: BoxDecoration(
-                color: graphBackgroundColor,
+                color: ppmGraphBackgroundColor,
                 border: Border.all(
-                  color: graphLineColor,
+                  color: ppmGraphLineColor,
                   width: 2,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: ppmContainerShadow.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(1, 1),
+                  ),
+                ],
                 borderRadius: BorderRadius.circular(10.0)),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(
+                const Padding(
+                  padding: EdgeInsets.only(
                     right: 25,
                     left: 25,
                     top: 5,
@@ -42,8 +50,8 @@ class _pHLineChartState extends State<pHLineChart> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'pH Level',
+                        Text(
+                          'PPM',
                           style: TextStyle(
                             color: primaryTextColor,
                             fontSize: 18,
@@ -98,9 +106,9 @@ class _pHLineChartState extends State<pHLineChart> {
                             isCurved: false,
                             isStepLineChart: true,
                             barWidth: 4,
-                            color: pHBarLineColor,
-                            shadow: Shadow(
-                                color: pHBarLineShadowColor,
+                            color: ppmBarLineColor,
+                            shadow: const Shadow(
+                                color: ppmBarLineShadowColor,
                                 offset: Offset(2, 2),
                                 blurRadius: 10.0),
                             spots: const [
@@ -114,11 +122,11 @@ class _pHLineChartState extends State<pHLineChart> {
                             ],
                             belowBarData: BarAreaData(
                               show: true,
-                              gradient: LinearGradient(
+                              gradient: const LinearGradient(
                                 colors: [
-                                  pHTertiaryGradientColor,
-                                  pHSecondaryGradientColor,
-                                  pHPrimaryGradientColor,
+                                  ppmTertiaryGradientColor,
+                                  ppmSecondaryGradientColor,
+                                  ppmPrimaryGradientColor,
                                 ],
                                 transform: GradientRotation(60.0),
                                 stops: [
@@ -130,7 +138,7 @@ class _pHLineChartState extends State<pHLineChart> {
                                 end: Alignment.topLeft,
                               ),
                             ),
-                            dotData: FlDotData(
+                            dotData: const FlDotData(
                               show: true,
                             ),
                           ),
@@ -138,20 +146,20 @@ class _pHLineChartState extends State<pHLineChart> {
                         minY: 0,
                         borderData: FlBorderData(
                           show: true,
-                          border: Border(
+                          border: const Border(
                             top: BorderSide.none,
                             right: BorderSide.none,
                             left: BorderSide(
-                              color: graphBorderLineColor,
+                              color: ppmGraphBorderLineColor,
                               width: 2,
                             ),
                             bottom: BorderSide(
-                              color: graphBorderLineColor,
+                              color: ppmGraphBorderLineColor,
                               width: 2,
                             ),
                           ),
                         ),
-                        gridData: FlGridData(show: false),
+                        gridData: const FlGridData(show: false),
                         titlesData: FlTitlesData(
                           show: true,
                           topTitles: AxisTitles(
@@ -162,7 +170,7 @@ class _pHLineChartState extends State<pHLineChart> {
                             ),
                           ),
                           bottomTitles: AxisTitles(
-                            axisNameWidget: Text(
+                            axisNameWidget: const Text(
                               'Time',
                               style: TextStyle(
                                 color: primaryTextColor,
@@ -176,7 +184,7 @@ class _pHLineChartState extends State<pHLineChart> {
                                 getTitlesWidget: getBottomTitles),
                           ),
                           leftTitles: AxisTitles(
-                            axisNameWidget: Text(
+                            axisNameWidget: const Text(
                               'Value',
                               style: TextStyle(
                                 color: primaryTextColor,
@@ -201,7 +209,7 @@ class _pHLineChartState extends State<pHLineChart> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 )
               ],
@@ -209,7 +217,7 @@ class _pHLineChartState extends State<pHLineChart> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 22),
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: 25,
@@ -226,7 +234,18 @@ class _pHLineChartState extends State<pHLineChart> {
               children: [
                 Container(
                   width: 50,
-                  child: Center(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide.none,
+                      left: BorderSide.none,
+                      bottom: BorderSide.none,
+                      right: BorderSide(
+                        width: 2,
+                        color: borderColor,
+                      ),
+                    ),
+                  ),
+                  child: const Center(
                     child: Text(
                       '1H',
                       style: TextStyle(
@@ -235,7 +254,10 @@ class _pHLineChartState extends State<pHLineChart> {
                       ),
                     ),
                   ),
-                  decoration: BoxDecoration(
+                ),
+                Container(
+                  width: 50,
+                  decoration: const BoxDecoration(
                     border: Border(
                       top: BorderSide.none,
                       left: BorderSide.none,
@@ -246,10 +268,7 @@ class _pHLineChartState extends State<pHLineChart> {
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  width: 50,
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       '4H',
                       style: TextStyle(
@@ -258,7 +277,10 @@ class _pHLineChartState extends State<pHLineChart> {
                       ),
                     ),
                   ),
-                  decoration: BoxDecoration(
+                ),
+                Container(
+                  width: 50,
+                  decoration: const BoxDecoration(
                     border: Border(
                       top: BorderSide.none,
                       left: BorderSide.none,
@@ -269,10 +291,7 @@ class _pHLineChartState extends State<pHLineChart> {
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  width: 50,
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       '6H',
                       style: TextStyle(
@@ -281,7 +300,10 @@ class _pHLineChartState extends State<pHLineChart> {
                       ),
                     ),
                   ),
-                  decoration: BoxDecoration(
+                ),
+                Container(
+                  width: 50,
+                  decoration: const BoxDecoration(
                     border: Border(
                       top: BorderSide.none,
                       left: BorderSide.none,
@@ -292,10 +314,7 @@ class _pHLineChartState extends State<pHLineChart> {
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  width: 50,
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       '12H',
                       style: TextStyle(
@@ -304,21 +323,17 @@ class _pHLineChartState extends State<pHLineChart> {
                       ),
                     ),
                   ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide.none,
-                      left: BorderSide.none,
-                      bottom: BorderSide.none,
-                      right: BorderSide(
-                        width: 2,
-                        color: borderColor,
-                      ),
-                    ),
-                  ),
                 ),
                 Container(
                   width: 50,
-                  child: Center(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                        top: BorderSide.none,
+                        left: BorderSide.none,
+                        bottom: BorderSide.none,
+                        right: BorderSide.none),
+                  ),
+                  child: const Center(
                     child: Text(
                       '24H',
                       style: TextStyle(
@@ -326,13 +341,6 @@ class _pHLineChartState extends State<pHLineChart> {
                         fontSize: 14,
                       ),
                     ),
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                        top: BorderSide.none,
-                        left: BorderSide.none,
-                        bottom: BorderSide.none,
-                        right: BorderSide.none),
                   ),
                 ),
               ],
@@ -425,6 +433,6 @@ class _pHLineChartState extends State<pHLineChart> {
     const style = TextStyle(
       color: Colors.transparent,
     );
-    return Text('hack', style: style);
+    return const Text('hack', style: style);
   } // a hack for titles: fixed stupid text clipping when not showing a title side.
 }
