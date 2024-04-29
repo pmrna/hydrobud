@@ -2,14 +2,14 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrobud/constants/colors.dart';
 
-class PhLineChart extends StatefulWidget {
-  const PhLineChart({super.key});
+class WaterTempLineChart extends StatefulWidget {
+  const WaterTempLineChart({super.key});
 
   @override
-  State<PhLineChart> createState() => _PhLineChartState();
+  State<WaterTempLineChart> createState() => _WaterTempChartState();
 }
 
-class _PhLineChartState extends State<PhLineChart> {
+class _WaterTempChartState extends State<WaterTempLineChart> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,14 +23,14 @@ class _PhLineChartState extends State<PhLineChart> {
           ),
           child: Container(
             decoration: BoxDecoration(
-                color: pHGraphBackgroundColor,
+                color: waterTempGraphBackgroundColor,
                 border: Border.all(
-                  color: pHGraphLineColor,
+                  color: waterTempGraphLineColor,
                   width: 2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: pHBarLineColor.withOpacity(0.5),
+                    color: waterTempContainerShadow.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(1, 1),
@@ -51,7 +51,7 @@ class _PhLineChartState extends State<PhLineChart> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'pH Level',
+                          'TEMPERATURE',
                           style: TextStyle(
                             color: primaryTextColor,
                             fontSize: 18,
@@ -106,9 +106,9 @@ class _PhLineChartState extends State<PhLineChart> {
                             isCurved: false,
                             isStepLineChart: true,
                             barWidth: 4,
-                            color: pHBarLineColor,
+                            color: waterTempBarLineColor,
                             shadow: const Shadow(
-                                color: pHBarLineShadowColor,
+                                color: waterTempBarLineShadowColor,
                                 offset: Offset(2, 2),
                                 blurRadius: 10.0),
                             spots: const [
@@ -124,9 +124,9 @@ class _PhLineChartState extends State<PhLineChart> {
                               show: true,
                               gradient: const LinearGradient(
                                 colors: [
-                                  pHTertiaryGradientColor,
-                                  pHSecondaryGradientColor,
-                                  pHPrimaryGradientColor,
+                                  waterTempTertiaryGradientColor,
+                                  waterTempSecondaryGradientColor,
+                                  waterTempPrimaryGradientColor,
                                 ],
                                 transform: GradientRotation(60.0),
                                 stops: [
@@ -146,15 +146,15 @@ class _PhLineChartState extends State<PhLineChart> {
                         minY: 0,
                         borderData: FlBorderData(
                           show: true,
-                          border: Border(
+                          border: const Border(
                             top: BorderSide.none,
                             right: BorderSide.none,
                             left: BorderSide(
-                              color: pHGraphBorderLineColor,
+                              color: waterTempGraphBorderLineColor,
                               width: 2,
                             ),
                             bottom: BorderSide(
-                              color: pHGraphBorderLineColor,
+                              color: waterTempGraphBorderLineColor,
                               width: 2,
                             ),
                           ),

@@ -23,14 +23,14 @@ class _PpmLineChart extends State<PpmLineChart> {
           ),
           child: Container(
             decoration: BoxDecoration(
-                color: ppmpHGraphBackgroundColor,
+                color: ppmGraphBackgroundColor,
                 border: Border.all(
-                  color: ppmpHGraphLineColor,
+                  color: ppmGraphLineColor,
                   width: 2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: ppmBarLineColor.withOpacity(0.5),
+                    color: ppmContainerShadow.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(1, 1),
