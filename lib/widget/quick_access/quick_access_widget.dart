@@ -121,7 +121,7 @@ class _QuickAccessWidgetState extends State<QuickAccessWidget> {
             isLoaded
                 ? _buildLineGraph(graphColor: graphColor)
                 // Loading Indicator for database should be shown only when database is not loaded, not first initialized.
-                : LoadingIndicatorWidget(
+                : const LoadingIndicatorWidget(
                     label: '<Database not Loaded>',
                   )
           ],
@@ -187,17 +187,17 @@ Widget buildResponsiveContainer({
 
 Widget _buildLineGraph({required String graphColor}) {
   if (graphColor == 'green') {
-    return PhLineChart();
+    return const PhLineChart();
   } else if (graphColor == 'yellow') {
-    return PpmLineChart();
+    return const PpmLineChart();
   } else if (graphColor == 'pink') {
-    return WaterTempLineChart();
+    return const WaterTempLineChart();
   } else if (graphColor == 'blue') {
-    return WaterLevelLineChart();
+    return const WaterLevelLineChart();
   }
 
   // This is placeholder, PhLineChart should be shown immediately without selecting containers.
-  return LoadingIndicatorWidget(
+  return const LoadingIndicatorWidget(
     label: '<No chart selected>',
   );
 }
