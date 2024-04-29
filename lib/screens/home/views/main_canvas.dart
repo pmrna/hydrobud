@@ -74,7 +74,6 @@ class MainCanvas extends StatelessWidget {
               height: 20,
             ),
             Row(
-              // dito mag start
               children: [
                 const Icon(
                   Icons.water,
@@ -93,8 +92,8 @@ class MainCanvas extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 10),
-            Expanded(
+            const SizedBox(height: 10),
+            const Expanded(
               child: HorizontalListView(),
             ),
           ],
