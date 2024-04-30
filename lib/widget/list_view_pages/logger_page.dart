@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoggerPage extends StatefulWidget {
-  const LoggerPage({Key? key}) : super(key: key);
+  const LoggerPage({super.key});
 
   @override
   _LoggerPageState createState() => _LoggerPageState();
@@ -17,12 +17,12 @@ class _LoggerPageState extends State<LoggerPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
+          icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        title: Text(
+        title: const Text(
           'Logger',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -37,7 +37,7 @@ class _LoggerPageState extends State<LoggerPage> {
             isExpanded: true,
             hint: Text(
               hintText,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
             value: selectedItems,
             items: [
@@ -46,10 +46,10 @@ class _LoggerPageState extends State<LoggerPage> {
                   value: item,
                   child: Text(
                     item,
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                   ),
                 );
-              }).toList(),
+              }),
             ],
             onChanged: (String? newValue) {
               setState(() {
