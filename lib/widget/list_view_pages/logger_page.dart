@@ -10,12 +10,40 @@ class LoggerPage extends StatefulWidget {
 class _LoggerPageState extends State<LoggerPage> {
   List<String> items = ['Crop 1', 'Crop 2', 'Crop 3'];
   String? selectedItems;
+  DateTime? transplantDate;
+  DateTime? harvestedDate;
   String hintText = "Select Crops...";
-  String transplantDate = "";
-  String dateHarvested = "";
   String totalPlantedCrops = "";
   String totalKGs = "";
   String salesAmount = "";
+
+  Future<void> _selectTransplantDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != transplantDate) {
+      setState(() {
+        transplantDate = picked;
+      });
+    }
+  }
+
+  Future<void> _selectHarvestedDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != harvestedDate) {
+      setState(() {
+        harvestedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +55,7 @@ class _LoggerPageState extends State<LoggerPage> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text(
+        title: const Text(
           'Logger',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -41,78 +69,114 @@ class _LoggerPageState extends State<LoggerPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 200,
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  hint: Text(
-                    hintText,
-                    style: TextStyle(fontSize: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Crop name",
+                    style: TextStyle(fontSize: 16),
                   ),
-                  value: selectedItems,
-                  items: [
-                    ...items.map((item) {
-                      return DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item,
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      );
-                    })
-                  ],
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedItems = newValue;
-                      hintText = newValue ?? "Select Crops...";
-                    });
-                  },
+                  SizedBox(
+                      height: 5), // Add some space between label and dropdown
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    padding: const EdgeInsets.only(left: 10),
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      underline:
+                          SizedBox(), // or underline: Container(), to remove the underline
+                      hint: Text(
+                        hintText,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      value: selectedItems,
+                      items: [
+                        ...items.map((item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                          );
+                        })
+                      ],
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedItems = newValue;
+                          hintText = newValue ?? "Select Crops...";
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+              GestureDetector(
+                onTap: () => _selectTransplantDate(context),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white70),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Transplant Date",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        transplantDate != null
+                            ? "${transplantDate!.day}/${transplantDate!.month}/${transplantDate!.year}"
+                            : "Select Date",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(height: 20),
-              Text("Transplant Date", style: TextStyle(fontSize: 16)),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () => _selectHarvestedDate(context),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white70),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Date Harvested",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        harvestedDate != null
+                            ? "${harvestedDate!.day}/${harvestedDate!.month}/${harvestedDate!.year}"
+                            : "Select Date",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Text("Total Planted Crops", style: TextStyle(fontSize: 16)),
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white70),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
+                padding: const EdgeInsets.only(left: 10),
                 child: TextField(
                   cursorColor: Colors.white70,
-                  decoration: InputDecoration(border: InputBorder.none),
-                  onChanged: (textvalue) {
-                    setState(() {
-                      transplantDate = textvalue;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(height: 10),
-              Text("Date Harvested", style: TextStyle(fontSize: 16)),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white70),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: TextField(
-                  cursorColor: Colors.white70,
-                  decoration: InputDecoration(border: InputBorder.none),
-                  onChanged: (textvalue) {
-                    setState(() {
-                      dateHarvested = textvalue;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(height: 10),
-              Text("Total Planted Crops", style: TextStyle(fontSize: 16)),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white70),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: TextField(
-                  cursorColor: Colors.white70,
-                  decoration: InputDecoration(border: InputBorder.none),
+                  decoration: const InputDecoration(border: InputBorder.none),
                   onChanged: (textvalue) {
                     setState(() {
                       totalPlantedCrops = textvalue;
@@ -120,16 +184,17 @@ class _LoggerPageState extends State<LoggerPage> {
                   },
                 ),
               ),
-              SizedBox(height: 10),
-              Text("Total KGs", style: TextStyle(fontSize: 16)),
+              const SizedBox(height: 10),
+              const Text("Total Weight in KGs", style: TextStyle(fontSize: 16)),
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white70),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
+                padding: const EdgeInsets.only(left: 10),
                 child: TextField(
                   cursorColor: Colors.white70,
-                  decoration: InputDecoration(border: InputBorder.none),
+                  decoration: const InputDecoration(border: InputBorder.none),
                   onChanged: (textvalue) {
                     setState(() {
                       totalKGs = textvalue;
@@ -137,16 +202,17 @@ class _LoggerPageState extends State<LoggerPage> {
                   },
                 ),
               ),
-              SizedBox(height: 10),
-              Text("Sales Amount", style: TextStyle(fontSize: 16)),
+              const SizedBox(height: 10),
+              const Text("Sales Amount", style: TextStyle(fontSize: 16)),
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white70),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
+                padding: const EdgeInsets.only(left: 10),
                 child: TextField(
                   cursorColor: Colors.white70,
-                  decoration: InputDecoration(border: InputBorder.none),
+                  decoration: const InputDecoration(border: InputBorder.none),
                   onChanged: (textvalue) {
                     setState(() {
                       salesAmount = textvalue;
@@ -162,7 +228,7 @@ class _LoggerPageState extends State<LoggerPage> {
         padding: const EdgeInsets.all(10.0),
         child: FloatingActionButton(
           onPressed: () {
-            // CODE FOR
+            // CODE FOR PRESSED
           },
           backgroundColor: Colors.green,
           child: const Icon(Icons.check),
