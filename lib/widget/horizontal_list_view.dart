@@ -16,7 +16,7 @@ class CardItem {
 }
 
 class HorizontalListView extends StatefulWidget {
-  const HorizontalListView({Key? key}) : super(key: key);
+  const HorizontalListView({super.key});
 
   @override
   State<HorizontalListView> createState() => _HorizontalListViewState();
@@ -59,14 +59,14 @@ class _HorizontalListViewState extends State<HorizontalListView> {
         extendBodyBehindAppBar: true,
         body: Column(
           children: [
-            SizedBox(height: 50), // Adjust spacing here
+            const SizedBox(height: 50), // Adjust spacing here
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               height: 150,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: items.length,
-                separatorBuilder: (context, _) => SizedBox(width: 12),
+                separatorBuilder: (context, _) => const SizedBox(width: 12),
                 itemBuilder: (context, index) =>
                     buildCard(context, item: items[index]),
               ),
@@ -75,7 +75,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
         ),
       );
 
-  Widget buildCard(BuildContext context, {required CardItem item}) => Container(
+  Widget buildCard(BuildContext context, {required CardItem item}) => SizedBox(
         width: 160,
         child: Column(
           children: [
@@ -103,10 +103,10 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                 ),
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               item.title,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             )
           ],
         ),

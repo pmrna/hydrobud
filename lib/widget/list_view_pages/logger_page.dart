@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoggerPage extends StatefulWidget {
-  const LoggerPage({Key? key}) : super(key: key);
+  const LoggerPage({super.key});
 
   @override
   _LoggerPageState createState() => _LoggerPageState();
@@ -50,7 +50,7 @@ class _LoggerPageState extends State<LoggerPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
+          icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () {
             Navigator.of(context).pop();
           },

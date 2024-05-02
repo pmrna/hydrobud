@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class IrrigationPage extends StatelessWidget {
-  const IrrigationPage({Key? key}) : super(key: key);
+  const IrrigationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
