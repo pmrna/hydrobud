@@ -61,7 +61,6 @@ class _HorizontalListViewState extends State<HorizontalListView> {
           children: [
             const SizedBox(height: 50), // Adjust spacing here
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
               height: 150,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
@@ -106,7 +105,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
             const SizedBox(height: 4),
             Text(
               item.title,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             )
           ],
         ),

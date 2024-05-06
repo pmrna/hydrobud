@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hydrobud/constants/colors.dart';
 
 class LoggerPage extends StatefulWidget {
   const LoggerPage({super.key});
@@ -19,11 +20,17 @@ class _LoggerPageState extends State<LoggerPage> {
 
   Future<void> _selectTransplantDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2101),
-    );
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2101),
+        builder: (context, child) => Theme(
+              data: ThemeData().copyWith(
+                  colorScheme: const ColorScheme.dark(
+                primary: onPrimaryColor,
+              )),
+              child: child!,
+            ));
     if (picked != null && picked != transplantDate) {
       setState(() {
         transplantDate = picked;
@@ -33,11 +40,17 @@ class _LoggerPageState extends State<LoggerPage> {
 
   Future<void> _selectHarvestedDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2101),
-    );
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2101),
+        builder: (context, child) => Theme(
+              data: ThemeData().copyWith(
+                  colorScheme: const ColorScheme.dark(
+                primary: onPrimaryColor,
+              )),
+              child: child!,
+            ));
     if (picked != null && picked != harvestedDate) {
       setState(() {
         harvestedDate = picked;
@@ -175,6 +188,7 @@ class _LoggerPageState extends State<LoggerPage> {
                 ),
                 padding: const EdgeInsets.only(left: 10),
                 child: TextField(
+                  keyboardType: TextInputType.number,
                   cursorColor: Colors.white70,
                   decoration: const InputDecoration(border: InputBorder.none),
                   onChanged: (textvalue) {
@@ -185,7 +199,7 @@ class _LoggerPageState extends State<LoggerPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              const Text("Total Weight in KGs", style: TextStyle(fontSize: 16)),
+              const Text("Total Weight (KG)", style: TextStyle(fontSize: 16)),
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white70),
@@ -193,6 +207,7 @@ class _LoggerPageState extends State<LoggerPage> {
                 ),
                 padding: const EdgeInsets.only(left: 10),
                 child: TextField(
+                  keyboardType: TextInputType.number,
                   cursorColor: Colors.white70,
                   decoration: const InputDecoration(border: InputBorder.none),
                   onChanged: (textvalue) {
@@ -203,7 +218,7 @@ class _LoggerPageState extends State<LoggerPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              const Text("Sales Amount", style: TextStyle(fontSize: 16)),
+              const Text("Sales Amount (PHP)", style: TextStyle(fontSize: 16)),
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white70),
@@ -211,6 +226,7 @@ class _LoggerPageState extends State<LoggerPage> {
                 ),
                 padding: const EdgeInsets.only(left: 10),
                 child: TextField(
+                  keyboardType: TextInputType.number,
                   cursorColor: Colors.white70,
                   decoration: const InputDecoration(border: InputBorder.none),
                   onChanged: (textvalue) {
