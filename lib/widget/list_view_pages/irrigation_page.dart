@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class IrrigationPage extends StatefulWidget {
-  const IrrigationPage({Key? key}) : super(key: key);
+  const IrrigationPage({super.key});
 
   @override
   _IrrigationPageState createState() => _IrrigationPageState();
@@ -160,7 +160,8 @@ class _IrrigationPageState extends State<IrrigationPage> {
                           child: TextField(
                             keyboardType: TextInputType.number,
                             cursorColor: Colors.white70,
-                            decoration: const InputDecoration(border: InputBorder.none),
+                            decoration:
+                                const InputDecoration(border: InputBorder.none),
                             onChanged: (value) {
                               setState(() {
                                 numberOfCrops = value;
@@ -190,7 +191,8 @@ class _IrrigationPageState extends State<IrrigationPage> {
                           child: TextField(
                             keyboardType: TextInputType.number,
                             cursorColor: Colors.white70,
-                            decoration: const InputDecoration(border: InputBorder.none),
+                            decoration:
+                                const InputDecoration(border: InputBorder.none),
                             onChanged: (value) {
                               setState(() {
                                 litersOfWater = value;
@@ -214,8 +216,7 @@ class _IrrigationPageState extends State<IrrigationPage> {
             // Add your action here
           },
           style: ButtonStyle(
-            backgroundColor:
-            MaterialStateProperty.all<Color>(Colors.green),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
               const EdgeInsets.symmetric(horizontal: 26, vertical: 17),
             ),

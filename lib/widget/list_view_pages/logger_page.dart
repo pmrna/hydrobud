@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/constants/colors.dart';
+import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoggerPage extends StatefulWidget {
   const LoggerPage({super.key});
@@ -20,17 +22,19 @@ class _LoggerPageState extends State<LoggerPage> {
 
   Future<void> _selectTransplantDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2020),
-        lastDate: DateTime(2101),
-        builder: (context, child) => Theme(
-              data: ThemeData().copyWith(
-                  colorScheme: const ColorScheme.dark(
-                primary: onPrimaryColor,
-              )),
-              child: child!,
-            ));
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2101),
+      builder: (context, child) => Theme(
+        data: ThemeData().copyWith(
+          colorScheme: const ColorScheme.dark(
+            primary: onPrimaryColor,
+          ),
+        ),
+        child: child!,
+      ),
+    );
     if (picked != null && picked != transplantDate) {
       setState(() {
         transplantDate = picked;
@@ -40,21 +44,84 @@ class _LoggerPageState extends State<LoggerPage> {
 
   Future<void> _selectHarvestedDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2020),
-        lastDate: DateTime(2101),
-        builder: (context, child) => Theme(
-              data: ThemeData().copyWith(
-                  colorScheme: const ColorScheme.dark(
-                primary: onPrimaryColor,
-              )),
-              child: child!,
-            ));
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2101),
+      builder: (context, child) => Theme(
+        data: ThemeData().copyWith(
+          colorScheme: const ColorScheme.dark(
+            primary: onPrimaryColor,
+          ),
+        ),
+        child: child!,
+      ),
+    );
     if (picked != null && picked != harvestedDate) {
       setState(() {
         harvestedDate = picked;
       });
+    }
+  }
+
+  void logDataSubmit() {
+    if (selectedItems == null ||
+        transplantDate == null ||
+        harvestedDate == null ||
+        totalPlantedCrops.isEmpty ||
+        totalKGs.isEmpty ||
+        salesAmount.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Fields Empty'),
+            content: const Text(
+              'Please fill in all fields.',
+              style: TextStyle(fontSize: 17),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      _sendDataToSupabase();
+    }
+  }
+
+  Future<void> _sendDataToSupabase() async {
+    try {
+      final response = await Supabase.instance.client.from('logDatas').insert([
+        {
+          'cropName': selectedItems,
+          'tDate': DateFormat.yMMMMd('en_US').format(transplantDate!),
+          'hDate': DateFormat.yMMMMd('en_US').format(harvestedDate!),
+          'totalCrops': totalPlantedCrops,
+          'totalWeight': totalKGs,
+          'totalSales': salesAmount,
+        }
+      ]);
+
+      if (response.error != null) {
+        debugPrint('Error inserting data: ${response.error!.message}');
+        // You can handle the error here, such as showing a snackbar or retry option.
+      } else {
+        debugPrint('Data inserted successfully');
+        // Handle successful insertion, such as navigating to a new screen or showing a success message.
+      }
+    } catch (error) {
+      debugPrint('Error: $error');
+      // Handle any other errors that might occur during the data insertion process.
     }
   }
 
@@ -85,11 +152,11 @@ class _LoggerPageState extends State<LoggerPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Crop name",
                     style: TextStyle(fontSize: 16),
                   ),
-                  SizedBox(
+                  const SizedBox(
                       height: 5), // Add some space between label and dropdown
                   Container(
                     decoration: BoxDecoration(
@@ -100,10 +167,10 @@ class _LoggerPageState extends State<LoggerPage> {
                     child: DropdownButton<String>(
                       isExpanded: true,
                       underline:
-                          SizedBox(), // or underline: Container(), to remove the underline
+                          const SizedBox(), // or underline: Container(), to remove the underline
                       hint: Text(
                         hintText,
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
                       value: selectedItems,
                       items: [
@@ -139,7 +206,7 @@ class _LoggerPageState extends State<LoggerPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         "Transplant Date",
                         style: TextStyle(fontSize: 16),
                       ),
@@ -147,7 +214,7 @@ class _LoggerPageState extends State<LoggerPage> {
                         transplantDate != null
                             ? "${transplantDate!.day}/${transplantDate!.month}/${transplantDate!.year}"
                             : "Select Date",
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ],
                   ),
@@ -165,7 +232,7 @@ class _LoggerPageState extends State<LoggerPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         "Date Harvested",
                         style: TextStyle(fontSize: 16),
                       ),
@@ -173,7 +240,7 @@ class _LoggerPageState extends State<LoggerPage> {
                         harvestedDate != null
                             ? "${harvestedDate!.day}/${harvestedDate!.month}/${harvestedDate!.year}"
                             : "Select Date",
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ],
                   ),
@@ -243,11 +310,11 @@ class _LoggerPageState extends State<LoggerPage> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(10.0),
         child: FloatingActionButton(
-          onPressed: () {
-            // CODE FOR PRESSED
-          },
           backgroundColor: Colors.green,
           child: const Icon(Icons.check),
+          onPressed: () {
+            logDataSubmit();
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
