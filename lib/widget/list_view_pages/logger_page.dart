@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hydrobud/constants/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoggerPage extends StatefulWidget {
   const LoggerPage({super.key});
@@ -19,6 +20,8 @@ class _LoggerPageState extends State<LoggerPage> {
   String totalPlantedCrops = "";
   String totalKGs = "";
   String salesAmount = "";
+
+  final supabase = Supabase.instance.client;
 
   Future<void> _selectTransplantDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -96,19 +99,28 @@ class _LoggerPageState extends State<LoggerPage> {
       );
     } else {
       _sendDataToSupabase();
+      Fluttertoast.showToast(
+          msg: "Data successfully logged",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: primaryColor,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      Navigator.of(context).pop();
     }
   }
 
   Future<void> _sendDataToSupabase() async {
     try {
-      final response = await Supabase.instance.client.from('logDatas').insert([
+      final response = await supabase.from('log_data').insert([
         {
-          'cropName': selectedItems,
-          'tDate': DateFormat.yMMMMd('en_US').format(transplantDate!),
-          'hDate': DateFormat.yMMMMd('en_US').format(harvestedDate!),
-          'totalCrops': totalPlantedCrops,
-          'totalWeight': totalKGs,
-          'totalSales': salesAmount,
+          'crop_name': selectedItems,
+          'transplant_date': DateFormat.yMMMMd('en_US').format(transplantDate!),
+          'harvest_date': DateFormat.yMMMMd('en_US').format(harvestedDate!),
+          'total_crops': totalPlantedCrops,
+          'total_weight': totalKGs,
+          'total_sales': salesAmount,
         }
       ]);
 
