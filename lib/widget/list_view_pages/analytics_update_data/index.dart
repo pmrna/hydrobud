@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/constants/colors.dart';
+import 'package:hydrobud/widget/list_view_pages/analytics_page.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class LoggerPage extends StatefulWidget {
-  const LoggerPage({super.key});
+class UpdateData extends StatefulWidget {
+  final AnalyticsData data;
+  const UpdateData({super.key, required this.data});
 
   @override
-  _LoggerPageState createState() => _LoggerPageState();
+  _UpdateDataState createState() => _UpdateDataState();
 }
 
-class _LoggerPageState extends State<LoggerPage> {
+class _UpdateDataState extends State<UpdateData> {
   List<String> items = ['Crop 1', 'Crop 2', 'Crop 3'];
   String? selectedItems;
   DateTime? transplantDate;
@@ -22,6 +24,36 @@ class _LoggerPageState extends State<LoggerPage> {
   String salesAmount = "";
 
   final supabase = Supabase.instance.client;
+
+  // Setting controllers for text field for initial values
+  TextEditingController totalPlantedController = TextEditingController();
+  TextEditingController totalKGsController = TextEditingController();
+  TextEditingController salesAmountController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    selectedItems = widget.data.cropName;
+    transplantDate = _formatDate(widget.data.transplantDate);
+    harvestedDate = _formatDate(widget.data.harvestDate);
+    totalPlantedController.text = widget.data.totalHarvest.toString();
+    totalKGsController.text = widget.data.totalWeight.toString();
+    salesAmountController.text = widget.data.totalSales.toString();
+  }
+
+  @override
+  void dispose() {
+    totalPlantedController.dispose();
+    totalKGsController.dispose();
+    salesAmountController.dispose();
+    super.dispose();
+  }
+
+  DateTime _formatDate(String dateString) {
+    final DateFormat originalFormat = DateFormat('MMMM dd, yyyy');
+    final DateTime parsedDate = originalFormat.parse(dateString);
+    return parsedDate;
+  }
 
   Future<void> _selectTransplantDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -113,24 +145,22 @@ class _LoggerPageState extends State<LoggerPage> {
 
   Future<void> _sendDataToSupabase() async {
     try {
-      final response = await supabase.from('log_data').insert([
-        {
-          'crop_name': selectedItems,
-          'transplant_date': DateFormat.yMMMMd('en_US').format(transplantDate!),
-          'harvest_date': DateFormat.yMMMMd('en_US').format(harvestedDate!),
-          'total_crops': totalPlantedCrops,
-          'total_weight': totalKGs,
-          'total_sales': salesAmount,
-        }
-      ]);
+      final response = await supabase.from('log_data').update({
+        'crop_name': selectedItems,
+        'transplant_date': DateFormat.yMMMMd('en_US').format(transplantDate!),
+        'harvest_date': DateFormat.yMMMMd('en_US').format(harvestedDate!),
+        'total_crops': totalPlantedCrops,
+        'total_weight': totalKGs,
+        'total_sales': salesAmount,
+      }).eq('id', widget.data.id);
 
       if (response.error != null) {
-        debugPrint('Error inserting data: ${response.error!.message}');
+        debugPrint('Error updating data: ${response.error!.message}');
       } else {
-        debugPrint('Data inserted successfully');
+        debugPrint('Data updated successfully');
       }
     } catch (error) {
-      debugPrint('Error: $error');
+      debugPrint('Error updating data: $error');
     }
   }
 
@@ -145,7 +175,7 @@ class _LoggerPageState extends State<LoggerPage> {
           },
         ),
         title: const Text(
-          'Logger',
+          'Update Logged Data',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 25,
@@ -264,6 +294,7 @@ class _LoggerPageState extends State<LoggerPage> {
                 ),
                 padding: const EdgeInsets.only(left: 10),
                 child: TextField(
+                  controller: totalPlantedController,
                   keyboardType: TextInputType.number,
                   cursorColor: Colors.white70,
                   decoration: const InputDecoration(border: InputBorder.none),
@@ -283,6 +314,7 @@ class _LoggerPageState extends State<LoggerPage> {
                 ),
                 padding: const EdgeInsets.only(left: 10),
                 child: TextField(
+                  controller: totalKGsController,
                   keyboardType: TextInputType.number,
                   cursorColor: Colors.white70,
                   decoration: const InputDecoration(border: InputBorder.none),
@@ -302,6 +334,7 @@ class _LoggerPageState extends State<LoggerPage> {
                 ),
                 padding: const EdgeInsets.only(left: 10),
                 child: TextField(
+                  controller: salesAmountController,
                   keyboardType: TextInputType.number,
                   cursorColor: Colors.white70,
                   decoration: const InputDecoration(border: InputBorder.none),

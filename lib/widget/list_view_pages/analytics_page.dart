@@ -3,15 +3,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../constants/colors.dart';
 import 'package:hydrobud/widget/list_view_pages/analytics_chart/analytics_chart_widget.dart';
+import 'package:hydrobud/widget/list_view_pages/analytics_update_data/index.dart';
 
 class AnalyticsData {
   final int id;
   final String harvestDate;
   final String transplantDate;
   final String cropName;
-  final int totalHarvest;
-  final int totalWeight;
-  final int totalSales;
+  final num totalHarvest;
+  final num totalWeight;
+  final num totalSales;
 
   AnalyticsData({
     required this.id,
@@ -28,20 +29,12 @@ final supabase = Supabase.instance.client;
 
 final logDataStream = supabase.from('log_data').stream(primaryKey: ['id']);
 
-// Update Note
-Future<void> updateNote(String noteId, String updatedNote) async {
-  await supabase
-      .from('log_data')
-      .update({'body': updatedNote}).eq('id', noteId);
-}
-
-// Delete Note
 Future<void> deleteLogData(int noteId) async {
   await supabase.from('log_data').delete().eq('id', noteId.toString());
 }
 
 class AnalyticsPage extends StatelessWidget {
-  const AnalyticsPage({Key? key}) : super(key: key);
+  const AnalyticsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +79,9 @@ class AnalyticsPage extends StatelessWidget {
                           transplantDate: data['transplant_date'] as String,
                           harvestDate: data['harvest_date'] as String,
                           cropName: data['crop_name'] as String,
-                          totalHarvest: data['total_crops'] as int,
-                          totalWeight: data['total_weight'] as int,
-                          totalSales: data['total_sales'] as int,
+                          totalHarvest: data['total_crops'] as num,
+                          totalWeight: data['total_weight'] as num,
+                          totalSales: data['total_sales'] as num,
                         ))
                     .toList();
 
@@ -113,6 +106,14 @@ class AnalyticsPage extends StatelessWidget {
                                   onPressed: () {
                                     // Handle edit CODE HERE
                                     Navigator.of(context).pop();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => UpdateData(
+                                          data: analyticsDataList[index],
+                                        ),
+                                      ),
+                                    );
                                   },
                                   child: const Text(
                                     'Edit',
@@ -151,8 +152,7 @@ class AnalyticsPage extends StatelessWidget {
                                                         primaryColor,
                                                     textColor: Colors.white,
                                                     fontSize: 16.0);
-                                                Navigator.of(context)
-                                                    .pop(); // Close confirmation dialog
+                                                Navigator.of(context).pop();
                                                 await deleteLogData(
                                                     analyticsDataList[index]
                                                         .id);
@@ -166,8 +166,7 @@ class AnalyticsPage extends StatelessWidget {
                                             ),
                                             TextButton(
                                               onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(); // Close confirmation dialog
+                                                Navigator.of(context).pop();
                                               },
                                               child: const Text(
                                                 'No',
@@ -206,7 +205,7 @@ class AnalyticsPage extends StatelessWidget {
                             child: InkWell(
                               borderRadius: BorderRadius.circular(20.0),
                               onTap: () {
-                                // Handle tap action here
+                                // Handle tap CODE HERE
                               },
                               child: ListTile(
                                 title: Column(
@@ -219,11 +218,11 @@ class AnalyticsPage extends StatelessWidget {
                                     Text(
                                         'Crop Type: ${analyticsDataList[index].cropName}'),
                                     Text(
-                                        'Total Crops ${analyticsDataList[index].totalHarvest}'),
+                                        'Total Crops: ${analyticsDataList[index].totalHarvest.toStringAsFixed(0)}'),
                                     Text(
-                                        'Total Weight: ${analyticsDataList[index].totalWeight}'),
+                                        'Total Weight: ${analyticsDataList[index].totalWeight.toStringAsFixed(2)}'),
                                     Text(
-                                        'Total Sales: ${analyticsDataList[index].totalSales}'),
+                                        'Total Sales: ${analyticsDataList[index].totalSales.toStringAsFixed(2)}'),
                                   ],
                                 ),
                               ),
