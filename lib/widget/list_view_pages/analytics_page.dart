@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../constants/colors.dart';
-import 'package:hydrobud/widget/list_view_pages/analytics_chart/analytics_chart_widget.dart';
+import 'package:hydrobud/widget/list_view_pages/analytics_chart/index.dart';
 import 'package:hydrobud/widget/list_view_pages/analytics_update_data/index.dart';
 
 class AnalyticsData {
@@ -10,16 +10,16 @@ class AnalyticsData {
   final String harvestDate;
   final String transplantDate;
   final String cropName;
-  final num totalHarvest;
-  final num totalWeight;
-  final num totalSales;
+  final String totalCrops;
+  final String totalWeight;
+  final String totalSales;
 
   AnalyticsData({
     required this.id,
     required this.harvestDate,
     required this.transplantDate,
     required this.cropName,
-    required this.totalHarvest,
+    required this.totalCrops,
     required this.totalWeight,
     required this.totalSales,
   });
@@ -79,9 +79,9 @@ class AnalyticsPage extends StatelessWidget {
                           transplantDate: data['transplant_date'] as String,
                           harvestDate: data['harvest_date'] as String,
                           cropName: data['crop_name'] as String,
-                          totalHarvest: data['total_crops'] as num,
-                          totalWeight: data['total_weight'] as num,
-                          totalSales: data['total_sales'] as num,
+                          totalCrops: data['total_crops'] as String,
+                          totalWeight: data['total_weight'] as String,
+                          totalSales: data['total_sales'] as String,
                         ))
                     .toList();
 
@@ -218,11 +218,11 @@ class AnalyticsPage extends StatelessWidget {
                                     Text(
                                         'Crop Type: ${analyticsDataList[index].cropName}'),
                                     Text(
-                                        'Total Crops: ${analyticsDataList[index].totalHarvest.toStringAsFixed(0)}'),
+                                        'Total Crops: ${analyticsDataList[index].totalCrops}'),
                                     Text(
-                                        'Total Weight: ${analyticsDataList[index].totalWeight.toStringAsFixed(2)}'),
+                                        'Total Weight: ${analyticsDataList[index].totalWeight}'),
                                     Text(
-                                        'Total Sales: ${analyticsDataList[index].totalSales.toStringAsFixed(2)}'),
+                                        'Total Sales: ${analyticsDataList[index].totalSales}'),
                                   ],
                                 ),
                               ),
