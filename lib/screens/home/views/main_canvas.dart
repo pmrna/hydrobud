@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/constants/colors.dart';
 import 'package:hydrobud/widget/quick_access/quick_access_widget.dart';
-import 'package:hydrobud/widget/horizontal_list_view.dart';
+import 'package:hydrobud/widget/horizontal_list_view/index.dart';
 
 class MainCanvas extends StatelessWidget {
   const MainCanvas({super.key});

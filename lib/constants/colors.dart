@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // ---- Main color pallet ---- //
 
 const primaryColor = Color(0xFF2c302e); //Jet
+const onPrimaryColor = Color(0xFFF8F8FF);
 const secondaryColor = Color(0xFF474a48); //Outer Space
 const tertiaryColor = Color(0xFF909590); //Battleship Gray
 const accentColor = Color(0xFF94d698); //Celadon

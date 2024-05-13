@@ -4,16 +4,18 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:hydrobud/constants/colors.dart';
+import 'package:hydrobud/widget/list_view_pages/analytics_page.dart';
 
-class LoggerPage extends StatefulWidget {
-  const LoggerPage({Key? key}) : super(key: key);
+class UpdateData extends StatefulWidget {
+  final AnalyticsData data;
+  const UpdateData({super.key, required this.data});
 
   @override
-  _LoggerPageState createState() => _LoggerPageState();
+  _UpdateDataState createState() => _UpdateDataState();
 }
 
-class _LoggerPageState extends State<LoggerPage> {
-  final List<String> items = ['Crop 1', 'Crop 2', 'Crop 3'];
+class _UpdateDataState extends State<UpdateData> {
+  List<String> items = ['Crop 1', 'Crop 2', 'Crop 3'];
   String? selectedItems;
   DateTime? transplantDate;
   DateTime? harvestedDate;
@@ -23,6 +25,35 @@ class _LoggerPageState extends State<LoggerPage> {
   String salesAmount = "";
 
   final supabase = Supabase.instance.client;
+
+  TextEditingController totalPlantedController = TextEditingController();
+  TextEditingController totalKGsController = TextEditingController();
+  TextEditingController salesAmountController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    selectedItems = widget.data.cropName;
+    transplantDate = _formatDate(widget.data.transplantDate);
+    harvestedDate = _formatDate(widget.data.harvestDate);
+    totalPlantedController.text = widget.data.totalCrops;
+    totalKGsController.text = widget.data.totalWeight;
+    salesAmountController.text = widget.data.totalSales;
+  }
+
+  @override
+  void dispose() {
+    totalPlantedController.dispose();
+    totalKGsController.dispose();
+    salesAmountController.dispose();
+    super.dispose();
+  }
+
+  DateTime _formatDate(String dateString) {
+    final DateFormat originalFormat = DateFormat('MMMM dd, yyyy');
+    final DateTime parsedDate = originalFormat.parse(dateString);
+    return parsedDate;
+  }
 
   Future<void> _selectDate(BuildContext context, DateTime? initialDate) async {
     final DateTime? picked = await showDatePicker(
@@ -79,6 +110,11 @@ class _LoggerPageState extends State<LoggerPage> {
   }
 
   void logDataSubmit() {
+    setState(() {
+      totalPlantedCrops = totalPlantedController.text;
+      totalKGs = totalKGsController.text;
+      salesAmount = salesAmountController.text;
+    });
     if (selectedItems == null ||
         transplantDate == null ||
         harvestedDate == null ||
@@ -88,7 +124,7 @@ class _LoggerPageState extends State<LoggerPage> {
       _showDialog();
     } else {
       _sendDataToSupabase();
-      _showToast("Data successfully logged");
+      _showToast("Data successfully updated");
       Navigator.of(context).pop();
     }
   }
@@ -133,24 +169,16 @@ class _LoggerPageState extends State<LoggerPage> {
 
   Future<void> _sendDataToSupabase() async {
     try {
-      final response = await supabase.from('log_data').insert([
-        {
-          'crop_name': selectedItems,
-          'transplant_date': DateFormat.yMMMMd('en_US').format(transplantDate!),
-          'harvest_date': DateFormat.yMMMMd('en_US').format(harvestedDate!),
-          'total_crops': totalPlantedCrops,
-          'total_weight': totalKGs,
-          'total_sales': salesAmount,
-        }
-      ]);
-
-      if (response.error != null) {
-        debugPrint('Error inserting data: ${response.error!.message}');
-      } else {
-        debugPrint('Data inserted successfully');
-      }
+      await supabase.from('log_data').update({
+        'crop_name': selectedItems,
+        'transplant_date': DateFormat.yMMMMd('en_US').format(transplantDate!),
+        'harvest_date': DateFormat.yMMMMd('en_US').format(harvestedDate!),
+        'total_crops': totalPlantedCrops,
+        'total_weight': totalKGs,
+        'total_sales': salesAmount,
+      }).eq('id', widget.data.id);
     } catch (error) {
-      debugPrint('Error: $error');
+      debugPrint('Error updating data: $error');
     }
   }
 
@@ -198,8 +226,7 @@ class _LoggerPageState extends State<LoggerPage> {
     );
   }
 
-  Widget _buildTextField(
-      String label, String value, void Function(String) onChanged) {
+  Widget _buildTextField(String label, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -211,10 +238,10 @@ class _LoggerPageState extends State<LoggerPage> {
           ),
           padding: const EdgeInsets.only(left: 10),
           child: TextField(
+            controller: controller,
             keyboardType: TextInputType.number,
             cursorColor: Colors.white70,
             decoration: const InputDecoration(border: InputBorder.none),
-            onChanged: onChanged,
           ),
         ),
       ],
@@ -232,7 +259,7 @@ class _LoggerPageState extends State<LoggerPage> {
           },
         ),
         title: const Text(
-          'Logger',
+          'Update Logged Data',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 25,
@@ -251,24 +278,11 @@ class _LoggerPageState extends State<LoggerPage> {
               const SizedBox(height: 10),
               _buildDateField("Date Harvested", harvestedDate),
               const SizedBox(height: 30),
-              _buildTextField("Total Planted Crops", totalPlantedCrops,
-                  (textValue) {
-                setState(() {
-                  totalPlantedCrops = textValue;
-                });
-              }),
+              _buildTextField("Total Planted Crops", totalPlantedController),
               const SizedBox(height: 10),
-              _buildTextField("Total Weight (KG)", totalKGs, (textValue) {
-                setState(() {
-                  totalKGs = textValue;
-                });
-              }),
+              _buildTextField("Total Weight (KG)", totalKGsController),
               const SizedBox(height: 10),
-              _buildTextField("Sales Amount (PHP)", salesAmount, (textValue) {
-                setState(() {
-                  salesAmount = textValue;
-                });
-              }),
+              _buildTextField("Sales Amount (PHP)", salesAmountController),
             ],
           ),
         ),
