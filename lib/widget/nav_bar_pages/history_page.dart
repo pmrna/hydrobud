@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hydrobud/widget/analytics_update_data/analytics_update_data.dart';
 import '../../constants/colors.dart';
-import 'package:hydrobud/widget/list_view_pages/analytics_chart/index.dart';
-import 'package:hydrobud/widget/list_view_pages/analytics_update_data/index.dart';
 
-class AnalyticsData {
+class HistoryPage extends StatefulWidget {
+  const HistoryPage({super.key});
+
+  @override
+  State<HistoryPage> createState() => _HistoryPageState();
+}
+
+class HistoryData {
   final int id;
   final String harvestDate;
   final String transplantDate;
@@ -14,7 +20,7 @@ class AnalyticsData {
   final String totalWeight;
   final String totalSales;
 
-  AnalyticsData({
+  HistoryData({
     required this.id,
     required this.harvestDate,
     required this.transplantDate,
@@ -33,34 +39,16 @@ Future<void> deleteLogData(int noteId) async {
   await supabase.from('log_data').delete().eq('id', noteId.toString());
 }
 
-class AnalyticsPage extends StatelessWidget {
-  const AnalyticsPage({super.key});
-
+class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         title: const Text('Analytics'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 35),
-          // const Text(
-          //   "COMBINATIONAL CHART, bali bar + line chart",
-          //   style: TextStyle(
-          //     fontSize: 16,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
-          const SizedBox(height: 35),
-          const Expanded(child: AnalyticsPageChart()),
           Expanded(
             child: StreamBuilder(
               stream: logDataStream,
@@ -73,8 +61,8 @@ class AnalyticsPage extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                final List<AnalyticsData> analyticsDataList = snapshot.data!
-                    .map((data) => AnalyticsData(
+                final List<HistoryData> analyticsDataList = snapshot.data!
+                    .map((data) => HistoryData(
                           id: data['id'] as int,
                           transplantDate: data['transplant_date'] as String,
                           harvestDate: data['harvest_date'] as String,
@@ -204,9 +192,7 @@ class AnalyticsPage extends StatelessWidget {
                             ),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(20.0),
-                              onTap: () {
-                                // Handle tap CODE HERE
-                              },
+                              onTap: () {},
                               child: ListTile(
                                 title: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

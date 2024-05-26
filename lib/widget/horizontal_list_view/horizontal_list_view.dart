@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hydrobud/widget/list_view_pages/analytics_page.dart';
-import 'package:hydrobud/widget/list_view_pages/irrigation_page.dart';
-import 'package:hydrobud/widget/list_view_pages/logger_page.dart';
+import 'package:hydrobud/widget/nav_bar_pages/analytics_page.dart';
+import 'package:hydrobud/widget/nav_bar_pages/irrigation_page.dart';
+import 'package:hydrobud/widget/nav_bar_pages/logger_page.dart';
 
 class CardItem {
   final String listViewImage;
