@@ -9,7 +9,7 @@ class Tuple<X, Y, Z> {
 }
 
 class AnalyticsPageChart extends StatelessWidget {
-  const AnalyticsPageChart({Key? key});
+  const AnalyticsPageChart({super.key});
 
   @override
   Widget build(BuildContext context) {

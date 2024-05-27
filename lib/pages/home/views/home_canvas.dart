@@ -45,18 +45,18 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 220,
               child: DrawerHeader(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.lightGreenAccent,
                 ),
                 margin: EdgeInsets.zero,
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 20,
                   left: 20,
                   bottom: 20,
                 ),
                 child: ListView(
                   children: <Widget>[
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         // use here GoogleCircleAvatar
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Text('Adrian Jose Flores',
+                    const Text('Adrian Jose Flores',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -92,11 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 TextButton.icon(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.logout_rounded,
                     size: 20,
                   ),
-                  label: Text(
+                  label: const Text(
                     'Sign out',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _signOut();
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 110,
                 )
               ],
@@ -137,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor:
                     MaterialStateProperty.all(Colors.lightGreenAccent),
                 alignment: AlignmentDirectional.center,
-                shape: MaterialStateProperty.all(CircleBorder()),
+                shape: MaterialStateProperty.all(const CircleBorder()),
               ),
               onPressed: () => {
                 Scaffold.of(context).openEndDrawer(),
@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: MainCanvas(),
+      body: const MainCanvas(),
     );
   }
 }

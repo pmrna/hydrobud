@@ -60,7 +60,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
         body: Column(
           children: [
             const SizedBox(height: 50), // Adjust spacing here
-            Container(
+            SizedBox(
               height: 150,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
