@@ -5,7 +5,6 @@ import 'package:hydrobud/widget/account_page_widget/account_page_widget.dart';
 import 'package:hydrobud/widget/login_page_widget/login_page.dart';
 import 'package:hydrobud/widget/splash_screen_widget/splash_screen_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:hydrobud/constants/colors.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: 'lib/.env');
