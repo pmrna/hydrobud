@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/constants/colors.dart';
 import 'package:hydrobud/widget/nav_bar_pages/logger_page.dart';
-import 'package:hydrobud/widget/quick_access/quick_access_widget.dart';
 import 'package:hydrobud/widget/nav_bar_pages/analytics_page.dart';
 import 'package:hydrobud/widget/nav_bar_pages/irrigation_page.dart';
 import 'package:hydrobud/widget/nav_bar_pages/history_page.dart';
+import 'package:hydrobud/widget/quick_access_widget/quick_access_widget.dart';
 
 class MainCanvas extends StatefulWidget {
   const MainCanvas({super.key});

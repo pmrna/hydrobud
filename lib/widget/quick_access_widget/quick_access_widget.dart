@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hydrobud/widget/loading_indicator/loading_indicator.dart';
-import 'package:hydrobud/widget/ph_line_chart/ph_line_chart_widget.dart';
-import 'package:hydrobud/widget/ppm_line_chart/ppm_line_chart_widget.dart';
-import 'package:hydrobud/widget/water_level_line_chart/water_level_line_chart_widget.dart';
-import 'package:hydrobud/widget/water_temp_line_chart/water_temp_line_chart_widget.dart';
+import 'package:hydrobud/widget/loading_indicator_widget/loading_indicator.dart';
+import 'package:hydrobud/widget/ph_line_chart_widget/ph_line_chart_widget.dart';
+import 'package:hydrobud/widget/ppm_line_chart_widget/ppm_line_chart_widget.dart';
+import 'package:hydrobud/widget/waterlevel_linechart_widget/water_level_line_chart_widget.dart';
+import 'package:hydrobud/widget/watertemp_linechart_widget/water_temp_line_chart_widget.dart';
 
 import '../../constants/colors.dart';
 
