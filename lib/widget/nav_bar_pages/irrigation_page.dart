@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class IrrigationPage extends StatefulWidget {
   const IrrigationPage({super.key});
@@ -17,19 +18,37 @@ class _IrrigationPageState extends State<IrrigationPage> {
   String hintText = "Select Crops...";
   String hintText2 = "Select NutSol...";
 
-  String numberOfCrops = '';
-  String litersOfWater = '';
+  String numberOfCrops = "";
+  String litersOfWater = "";
+
+  bool controlIrrig = false;
+
+  final supabase = Supabase.instance.client;
+
+  Future<void> _sendDataToSupabase() async {
+    try {
+      await supabase.from('irrigation').update({
+        'irrig_instruction': controlIrrig,
+        'res_liters': litersOfWater,
+      }).eq('id', 1);
+    } catch (error) {
+      debugPrint('Error updating data: $error');
+    }
+  }
+
+  void _toggleIrrigation() async {
+    setState(() {
+      controlIrrig = !controlIrrig;
+      debugPrint("irrigation stat");
+      debugPrint(controlIrrig.toString());
+    });
+    await _sendDataToSupabase();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         title: const Text(
           'Irrigation',
           style: TextStyle(
@@ -212,23 +231,22 @@ class _IrrigationPageState extends State<IrrigationPage> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(10.0),
         child: ElevatedButton(
-          onPressed: () {
-            // Add your action here
-          },
+          onPressed: _toggleIrrigation,
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            backgroundColor: MaterialStateProperty.all<Color>(
+                controlIrrig ? Colors.red : Colors.green),
             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
               const EdgeInsets.symmetric(horizontal: 26, vertical: 17),
             ),
           ),
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.play_arrow),
-              SizedBox(width: 8),
+              Icon(controlIrrig ? Icons.stop : Icons.play_arrow),
+              const SizedBox(width: 8),
               Text(
-                'Start',
-                style: TextStyle(fontSize: 17),
+                controlIrrig ? 'Stop' : 'Start',
+                style: const TextStyle(fontSize: 17),
               ),
             ],
           ),

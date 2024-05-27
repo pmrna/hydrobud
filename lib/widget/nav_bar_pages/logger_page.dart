@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:hydrobud/constants/colors.dart';
-import 'package:hydrobud/widget/list_view_pages/analytics_page.dart';
 
-class UpdateData extends StatefulWidget {
-  final AnalyticsData data;
-  const UpdateData({super.key, required this.data});
+class LoggerPage extends StatefulWidget {
+  const LoggerPage({super.key});
 
   @override
-  _UpdateDataState createState() => _UpdateDataState();
+  LoggerPageState createState() => LoggerPageState();
 }
 
-class _UpdateDataState extends State<UpdateData> {
-  List<String> items = ['Crop 1', 'Crop 2', 'Crop 3'];
+class LoggerPageState extends State<LoggerPage> with WidgetsBindingObserver {
+  final List<String> items = ['Crop 1', 'Crop 2', 'Crop 3'];
   String? selectedItems;
   DateTime? transplantDate;
   DateTime? harvestedDate;
@@ -23,36 +20,36 @@ class _UpdateDataState extends State<UpdateData> {
   String totalPlantedCrops = "";
   String totalKGs = "";
   String salesAmount = "";
+  bool _isKeyboardVisible = false;
 
   final supabase = Supabase.instance.client;
-
-  TextEditingController totalPlantedController = TextEditingController();
-  TextEditingController totalKGsController = TextEditingController();
-  TextEditingController salesAmountController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    selectedItems = widget.data.cropName;
-    transplantDate = _formatDate(widget.data.transplantDate);
-    harvestedDate = _formatDate(widget.data.harvestDate);
-    totalPlantedController.text = widget.data.totalCrops;
-    totalKGsController.text = widget.data.totalWeight;
-    salesAmountController.text = widget.data.totalSales;
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    totalPlantedController.dispose();
-    totalKGsController.dispose();
-    salesAmountController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  DateTime _formatDate(String dateString) {
-    final DateFormat originalFormat = DateFormat('MMMM dd, yyyy');
-    final DateTime parsedDate = originalFormat.parse(dateString);
-    return parsedDate;
+  void _checkKeyboardVisibility() {
+    final isKeyboardVisible =
+        // ignore: deprecated_member_use
+        WidgetsBinding.instance.window.viewInsets.bottom > 0;
+    if (isKeyboardVisible != _isKeyboardVisible) {
+      setState(() {
+        _isKeyboardVisible = isKeyboardVisible;
+      });
+    }
+  }
+
+  @override
+  void didChangeMetrics() {
+    _checkKeyboardVisibility();
   }
 
   Future<void> _selectDate(BuildContext context, DateTime? initialDate) async {
@@ -110,11 +107,6 @@ class _UpdateDataState extends State<UpdateData> {
   }
 
   void logDataSubmit() {
-    setState(() {
-      totalPlantedCrops = totalPlantedController.text;
-      totalKGs = totalKGsController.text;
-      salesAmount = salesAmountController.text;
-    });
     if (selectedItems == null ||
         transplantDate == null ||
         harvestedDate == null ||
@@ -124,8 +116,7 @@ class _UpdateDataState extends State<UpdateData> {
       _showDialog();
     } else {
       _sendDataToSupabase();
-      _showToast("Data successfully updated");
-      Navigator.of(context).pop();
+      _showToast("Data successfully logged");
     }
   }
 
@@ -169,16 +160,24 @@ class _UpdateDataState extends State<UpdateData> {
 
   Future<void> _sendDataToSupabase() async {
     try {
-      await supabase.from('log_data').update({
-        'crop_name': selectedItems,
-        'transplant_date': DateFormat.yMMMMd('en_US').format(transplantDate!),
-        'harvest_date': DateFormat.yMMMMd('en_US').format(harvestedDate!),
-        'total_crops': totalPlantedCrops,
-        'total_weight': totalKGs,
-        'total_sales': salesAmount,
-      }).eq('id', widget.data.id);
+      final response = await supabase.from('log_data').insert([
+        {
+          'crop_name': selectedItems,
+          'transplant_date': DateFormat.yMMMMd('en_US').format(transplantDate!),
+          'harvest_date': DateFormat.yMMMMd('en_US').format(harvestedDate!),
+          'total_crops': totalPlantedCrops,
+          'total_weight': totalKGs,
+          'total_sales': salesAmount,
+        }
+      ]);
+
+      if (response.error != null) {
+        debugPrint('Error inserting data: ${response.error!.message}');
+      } else {
+        debugPrint('Data inserted successfully');
+      }
     } catch (error) {
-      debugPrint('Error updating data: $error');
+      debugPrint('Error: $error');
     }
   }
 
@@ -226,7 +225,8 @@ class _UpdateDataState extends State<UpdateData> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller) {
+  Widget _buildTextField(
+      String label, String value, void Function(String) onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -238,10 +238,10 @@ class _UpdateDataState extends State<UpdateData> {
           ),
           padding: const EdgeInsets.only(left: 10),
           child: TextField(
-            controller: controller,
             keyboardType: TextInputType.number,
             cursorColor: Colors.white70,
             decoration: const InputDecoration(border: InputBorder.none),
+            onChanged: onChanged,
           ),
         ),
       ],
@@ -250,16 +250,12 @@ class _UpdateDataState extends State<UpdateData> {
 
   @override
   Widget build(BuildContext context) {
+    _checkKeyboardVisibility();
+
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         title: const Text(
-          'Update Logged Data',
+          'Logger',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 25,
@@ -278,23 +274,38 @@ class _UpdateDataState extends State<UpdateData> {
               const SizedBox(height: 10),
               _buildDateField("Date Harvested", harvestedDate),
               const SizedBox(height: 30),
-              _buildTextField("Total Planted Crops", totalPlantedController),
+              _buildTextField("Total Planted Crops", totalPlantedCrops,
+                  (textValue) {
+                setState(() {
+                  totalPlantedCrops = textValue;
+                });
+              }),
               const SizedBox(height: 10),
-              _buildTextField("Total Weight (KG)", totalKGsController),
+              _buildTextField("Total Weight (KG)", totalKGs, (textValue) {
+                setState(() {
+                  totalKGs = textValue;
+                });
+              }),
               const SizedBox(height: 10),
-              _buildTextField("Sales Amount (PHP)", salesAmountController),
+              _buildTextField("Sales Amount (PHP)", salesAmount, (textValue) {
+                setState(() {
+                  salesAmount = textValue;
+                });
+              }),
             ],
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: FloatingActionButton(
-          backgroundColor: Colors.green,
-          onPressed: logDataSubmit,
-          child: const Icon(Icons.check),
-        ),
-      ),
+      floatingActionButton: _isKeyboardVisible
+          ? null
+          : Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: FloatingActionButton(
+                backgroundColor: Colors.green,
+                onPressed: logDataSubmit,
+                child: const Icon(Icons.check),
+              ),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }

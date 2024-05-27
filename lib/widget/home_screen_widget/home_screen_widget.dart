@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hydrobud/constants/colors.dart';
 import 'package:hydrobud/widget/quick_access_widget/quick_access_widget.dart';
-import 'package:hydrobud/widget/horizontal_list_view/index.dart';
 
 class MainCanvas extends StatefulWidget {
   const MainCanvas({super.key});
@@ -18,7 +16,7 @@ class _MainCanvasState extends State<MainCanvas> {
         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
         child: Column(
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [],
             ),
@@ -47,10 +45,6 @@ class _MainCanvasState extends State<MainCanvas> {
                   ),
                 ),
               ],
-            ),
-            const SizedBox(height: 10),
-            const Expanded(
-              child: HorizontalListView(),
             ),
           ],
         ),
