@@ -13,8 +13,6 @@ class AnalyticsPage extends StatelessWidget {
       body: const Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(height: 35),
-          SizedBox(height: 35),
           Expanded(child: AnalyticsPageChart()),
         ],
       ),
