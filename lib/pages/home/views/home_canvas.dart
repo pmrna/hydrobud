@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hydrobud/main.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../../widget/home_screen_widget/home_screen_widget.dart';
-
-final databaseService = DatabaseService(Supabase.instance.client);
-final client = databaseService.client;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,26 +9,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<void> _signOut() async {
-    try {
-      await client.auth.signOut();
-    } on AuthException catch (error) {
-      SnackBar(
-        content: Text(error.message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } catch (error) {
-      SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } finally {
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/login');
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,9 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Colors.black.withOpacity(0.85),
                     ),
                   ),
-                  onPressed: () {
-                    _signOut();
-                  },
+                  onPressed: () {},
                 ),
                 const SizedBox(
                   height: 110,
@@ -150,6 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: const MainCanvas(),
+      //bottomNavigationBar: const BottomNavBarWidget(),
     );
   }
 }
