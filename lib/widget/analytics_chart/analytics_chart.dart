@@ -25,7 +25,7 @@ class _AnalyticsPageChartState extends State<AnalyticsPageChart> {
   List<List<Tuple<double, double, double>>> pHData = [];
 
   List<List<Tuple<double, double, double>>> ppmData = [
-    [Tuple(0, 13, 20)],
+    [Tuple(0, 13, 20)], // [X, Y, Z]
   ];
 
   List<List<Tuple<double, double, double>>> tempData = [
@@ -61,11 +61,7 @@ class _AnalyticsPageChartState extends State<AnalyticsPageChart> {
             debugPrint('Change received: ${payload.toString()}');
             setState(() {
               phValue = payload.newRecord['value'].toDouble();
-              if (pHData.isNotEmpty) {
-                pHData[0][0] = Tuple(0, phValue, 20);
-              } else {
-                pHData.add([Tuple(0, phValue, 20)]);
-              }
+              pHData.add([Tuple(0, phValue, 20)]);
             });
           },
         )
