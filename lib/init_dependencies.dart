@@ -18,8 +18,8 @@ Future<void> initDependencies() async {
     url: dotenv.get('SUPABASE_URL'),
     anonKey: dotenv.get('SUPABASE_ANON_KEY'),
   );
+  // Supabase client
   serviceLocator.registerLazySingleton(() => supabase.client);
-
   // Core
   serviceLocator.registerLazySingleton(() => AppUserCubit());
 }

@@ -105,7 +105,7 @@ class SignUpPageState extends State<SignUpPage> {
                                 password: passwordController.text.trim(),
                               ),
                             );
-                        print('Clicked!');
+                        //print('Clicked!');
                       }
                     },
                   ),
