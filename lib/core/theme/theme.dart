@@ -11,6 +11,9 @@ class AppTheme {
       );
   static final lightThemeMode = ThemeData.light().copyWith(
     scaffoldBackgroundColor: AppPallete.backgroundColor,
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: AppPallete.backgroundColor,
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppPallete.backgroundColor,
     ),

@@ -5,8 +5,8 @@ import 'package:hydrobud/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:hydrobud/core/theme/theme.dart';
 import 'package:hydrobud/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:hydrobud/features/auth/presentation/pages/sign_in_page.dart';
+import 'package:hydrobud/features/navigation/presentation/pages/wrapper.dart';
 import 'package:hydrobud/init_dependencies.dart';
-import 'package:hydrobud/pages/home/views/home_canvas.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: 'lib/.env');
@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
         },
         builder: (context, isSignedIn) {
           if (isSignedIn) {
-            return const HomeScreen();
+            return const Wrapper();
           }
           return const SignInPage();
         },
