@@ -5,7 +5,7 @@ import 'package:hydrobud/for_reuse/widget/ppm_line_chart_widget/ppm_line_chart_w
 import 'package:hydrobud/for_reuse/widget/waterlevel_linechart_widget/water_level_line_chart_widget.dart';
 import 'package:hydrobud/for_reuse/widget/watertemp_linechart_widget/water_temp_line_chart_widget.dart';
 
-import '../../../constants/colors.dart';
+import '../../constants/colors.dart';
 
 class QuickAccessWidget extends StatefulWidget {
   const QuickAccessWidget({super.key});

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hydrobud/for_reuse/widget/analytics_update_data/analytics_update_data.dart';
-import '../../../../constants/colors.dart';
+import '../../../../for_reuse/constants/colors.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});

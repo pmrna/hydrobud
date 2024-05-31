@@ -8,12 +8,20 @@ import 'package:hydrobud/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:hydrobud/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:hydrobud/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:hydrobud/features/auth/data/repositories/auth_repository_implementation.dart';
+import 'package:hydrobud/features/graph/data/datasources/chart_supabase_source.dart';
+import 'package:hydrobud/features/graph/data/repositories/chart_repository_implementation.dart';
+import 'package:hydrobud/features/graph/domain/repositories/chart_repository.dart';
+//import 'package:hydrobud/features/graph/domain/usecases/add_chart_data.dart';
+import 'package:hydrobud/features/graph/domain/usecases/fetch_chart_data.dart';
+import 'package:hydrobud/features/graph/presentation/bloc/chart_data_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
   _initAuth();
+  _initGraph();
+
   final supabase = await Supabase.initialize(
     url: dotenv.get('SUPABASE_URL'),
     anonKey: dotenv.get('SUPABASE_ANON_KEY'),
@@ -61,6 +69,28 @@ void _initAuth() {
         userSignIn: serviceLocator(),
         currentUser: serviceLocator(),
         appUserCubit: serviceLocator(),
+      ),
+    );
+}
+
+void _initGraph() {
+  serviceLocator
+    ..registerFactory<ChartSupabaseSource>(
+      () => ChartSupabaseSourceImplementation(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory<ChartRepository>(
+      () => ChartRepositoryImplementation(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(() => FetchChartData(serviceLocator()))
+    //..registerFactory(() => AddChartData(serviceLocator()))
+    ..registerLazySingleton(
+      () => ChartDataBloc(
+        //addGraphData: serviceLocator(),
+        fetchChartData: serviceLocator(),
       ),
     );
 }

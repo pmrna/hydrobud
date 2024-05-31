@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hydrobud/constants/colors.dart';
+import 'package:hydrobud/for_reuse/constants/colors.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/logger_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/analytics_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/irrigation_page.dart';

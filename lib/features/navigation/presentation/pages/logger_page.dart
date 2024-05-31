@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hydrobud/constants/colors.dart';
+import 'package:hydrobud/for_reuse/constants/colors.dart';
 
 class LoggerPage extends StatefulWidget {
   const LoggerPage({super.key});
