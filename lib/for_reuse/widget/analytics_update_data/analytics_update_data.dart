@@ -3,7 +3,7 @@ import 'package:hydrobud/features/navigation/presentation/pages/history_page.dar
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hydrobud/constants/colors.dart';
+import 'package:hydrobud/for_reuse/constants/colors.dart';
 
 class UpdateData extends StatefulWidget {
   final HistoryData data;

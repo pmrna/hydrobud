@@ -5,6 +5,7 @@ import 'package:hydrobud/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:hydrobud/core/theme/theme.dart';
 import 'package:hydrobud/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:hydrobud/features/auth/presentation/pages/sign_in_page.dart';
+import 'package:hydrobud/features/graph/presentation/bloc/chart_data_bloc.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/wrapper.dart';
 import 'package:hydrobud/init_dependencies.dart';
 
@@ -21,6 +22,9 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => serviceLocator<AuthBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => serviceLocator<ChartDataBloc>(),
       ),
     ],
     child: const MyApp(),

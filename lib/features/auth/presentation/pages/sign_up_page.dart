@@ -36,7 +36,7 @@ class SignUpPageState extends State<SignUpPage> {
         body: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthFailure) {
-              showSnackbar(context, state.message);
+              showSnackbar(context, 'SignUpError: ${state.message}');
             }
           },
           builder: (context, state) {
