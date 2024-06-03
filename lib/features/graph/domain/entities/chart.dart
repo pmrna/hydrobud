@@ -8,4 +8,12 @@ class Chart {
     required this.value,
     required this.time,
   });
+
+  factory Chart.fromMap(Map<String, dynamic> map) {
+    return Chart(
+      label: map['sensor_name'] as String,
+      value: double.parse(map['value'].toString()),
+      time: DateTime.parse(map['time']),
+    );
+  }
 }
