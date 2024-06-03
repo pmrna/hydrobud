@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
-import 'package:hydrobud/features/navigation/presentation/widgets/graph_outlined_button.dart';
+import 'package:hydrobud/features/analytics/presentation/widgets/graph_outlined_button.dart';
 
 class AnalyticsGraphContainer extends StatelessWidget {
   const AnalyticsGraphContainer({super.key});

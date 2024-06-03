@@ -4,7 +4,7 @@ import 'package:hydrobud/core/common/widgets/loader.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
 import 'package:hydrobud/features/graph/domain/entities/chart.dart';
 import 'package:hydrobud/features/graph/presentation/bloc/chart_data_bloc.dart';
-import 'package:hydrobud/features/navigation/presentation/pages/history_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SingleBarChartWidget extends StatefulWidget {
   const SingleBarChartWidget({super.key});
@@ -39,7 +39,8 @@ class _SingleBarChartWidgetState extends State<SingleBarChartWidget> {
     context.read<ChartDataBloc>().add(FetchChartDataEvent());
   }
 
-  final _stream = supabase.from('sensors').stream(primaryKey: ['id']);
+  final _stream =
+      Supabase.instance.client.from('sensors').stream(primaryKey: ['id']);
 
   @override
   Widget build(BuildContext context) {
@@ -118,13 +119,13 @@ class _SingleBarChartWidgetState extends State<SingleBarChartWidget> {
                 width: barWidth, // Adjust the multiplier to scale the bar width
                 decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
-                  border: Border.all(color: WidgetPallete.greenAccent),
+                  border: Border.all(color: WidgetPallete.greenAccent1),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(5.0),
                   ),
                 ),
                 child: const ColoredBox(
-                  color: WidgetPallete.greenAccent,
+                  color: WidgetPallete.greenAccent1,
                 ),
               ),
             ],
