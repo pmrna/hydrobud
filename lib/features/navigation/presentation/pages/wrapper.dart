@@ -16,7 +16,7 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[
+  static List<Widget> _pages = <Widget>[
     DashboardPage(),
     HistoryPage(),
     IrrigationPage(),
@@ -46,7 +46,7 @@ class _WrapperState extends State<Wrapper> {
               right: 12,
             ),
             child: CircleAvatar(
-              backgroundImage: AssetImage('assets/mascot.png'),
+              backgroundImage: AssetImage('assets/mascot/mascot.png'),
               radius: 20,
             ),
           ),

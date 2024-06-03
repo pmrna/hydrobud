@@ -29,7 +29,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
       listViewImage: 'lib/core/assets/images/analytics_logo.jpg',
       page: AnalyticsPage(),
     ),
-    const CardItem(
+    CardItem(
       title: 'Irrigation',
       listViewImage: 'assets/logo/irrigation_bg.jpg',
       page: IrrigationPage(),
