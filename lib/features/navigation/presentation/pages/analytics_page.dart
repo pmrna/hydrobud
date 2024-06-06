@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/core/common/widgets/header_text.dart';
-import 'package:hydrobud/core/theme/pallete.dart';
 import 'package:hydrobud/features/analytics/presentation/widgets/analytics_graph_container.dart';
 import 'package:hydrobud/features/analytics/presentation/widgets/analytics_harvest_today.dart';
 import 'package:hydrobud/features/analytics/presentation/widgets/analytics_total_graph.dart';
