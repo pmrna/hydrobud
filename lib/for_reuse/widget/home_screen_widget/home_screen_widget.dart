@@ -17,7 +17,7 @@ class MainCanvasState extends State<MainCanvas> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   bool _isKeyboardVisible = false;
 
-  static const List<Widget> _pages = <Widget>[
+  static List<Widget> _pages = <Widget>[
     Placeholder(),
     HistoryPage(),
     IrrigationPage(),

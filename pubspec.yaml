@@ -71,6 +71,10 @@ flutter:
     - lib/core/assets/images/logger_bg.jpg
     - lib/core/assets/images/irrigation_bg.jpg
     - lib/core/assets/images/lettuce_bg.jpg
+    - lib/core/assets/images/talong.jpg
+    - lib/core/assets/images/bill_pipper.jpg
+    - lib/core/assets/images/plant_asset.png
+    - lib/core/assets/images/letus-rec.png
     - lib/core/assets/mascot/mascot.png
     - lib/core/assets/icons/analytics_icon.png
     - lib/core/assets/icons/dashboard_icon.png
