@@ -11,14 +11,14 @@ class AnalyticsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: AppPallete.foregroundColor,
-        child: const Icon(
-          Icons.filter_alt,
-          color: Colors.white,
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   backgroundColor: AppPallete.foregroundColor,
+      //   child: const Icon(
+      //     Icons.filter_alt,
+      //     color: Colors.white,
+      //   ),
+      // ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 19, horizontal: 15),
         child: ListView(
