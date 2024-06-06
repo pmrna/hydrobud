@@ -18,9 +18,9 @@ class IrrigationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
+    return Card(
+      child: InkWell(
+        onTap: onTap,
         child: Container(
           alignment: Alignment.center,
           height: 140,
@@ -28,9 +28,9 @@ class IrrigationCard extends StatelessWidget {
             color: borderColor,
             border: Border.all(
               color: borderColor,
-              width: 3,
+              width: 6,
             ),
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(12.0),
             image: DecorationImage(
               image: AssetImage(imagePath),
               fit: BoxFit.cover,
@@ -48,12 +48,18 @@ class IrrigationCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
+                    shadows: [
+                      Shadow(
+                        color: Colors.black,
+                        blurRadius: 5,
+                        offset: Offset(0, 3),
+                      )
+                    ],
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 8),
               ],
             ),
           ),

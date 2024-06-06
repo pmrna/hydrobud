@@ -4,8 +4,7 @@ import 'package:hydrobud/features/irrigation/domain/entities/irrigation_preset.d
 class IrrigationPresetsPage extends StatelessWidget {
   final IrrigationPreset preset;
 
-  const IrrigationPresetsPage({Key? key, required this.preset})
-      : super(key: key);
+  const IrrigationPresetsPage({super.key, required this.preset});
 
   @override
   Widget build(BuildContext context) {
