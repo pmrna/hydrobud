@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hydrobud/features/maintain/presentation/pages/maintain_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/analytics_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/dashboard_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/history_page.dart';
@@ -16,12 +17,12 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   int _selectedIndex = 0;
 
-  static List<Widget> _pages = <Widget>[
-    DashboardPage(),
-    HistoryPage(),
+  final List<Widget> _pages = <Widget>[
+    const DashboardPage(),
+    const HistoryPage(),
     IrrigationPage(),
-    AnalyticsPage(),
-    LoggerPage(),
+    const AnalyticsPage(),
+    const MaintainPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -46,7 +47,7 @@ class _WrapperState extends State<Wrapper> {
               right: 12,
             ),
             child: CircleAvatar(
-              backgroundImage: AssetImage('assets/mascot/mascot.png'),
+              backgroundImage: AssetImage('lib/core/assets/mascot/mascot.png'),
               radius: 20,
             ),
           ),

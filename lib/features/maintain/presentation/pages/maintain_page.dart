@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
 import 'package:hydrobud/core/common/widgets/header_text.dart';
-import 'package:hydrobud/core/common/widgets/labels_text.dart';
+import 'package:hydrobud/features/analytics/presentation/widgets/logger_banner_title.dart';
 import 'package:hydrobud/features/irrigation/presentation/widgets/irrigation_text_field.dart';
 import 'package:hydrobud/features/irrigation/data/repositories/lettuce_preset_repository_impl.dart';
 import 'package:hydrobud/features/irrigation/domain/entities/lettuce_preset.dart';
@@ -70,16 +70,37 @@ class _MaintainPageState extends State<MaintainPage> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Center(
                   child: HeaderText(
-                    text: "Lettuce",
+                    text: "Maintaining",
+                  ),
+                ),
+                const SizedBox(height: 22),
+                const Text(
+                  'Transplant Data',
+                  textAlign: TextAlign.end,
+                ),
+                const Text(
+                  'June 07, 2024',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 35),
+                const BannerTitle(),
+                const SizedBox(height: 35),
+                const Text(
+                  'Maintainance Settings',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 30),
-                const LabelText(text: 'Preset'),
-                const SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(
@@ -122,17 +143,6 @@ class _MaintainPageState extends State<MaintainPage> {
                       ),
                     ),
                   ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 50.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const LabelText(text: 'Recommendation'),
-                      const SizedBox(height: 20),
-                      Image.asset('lib/core/assets/images/letus-rec.png'),
-                    ],
-                  ),
                 ),
               ],
             ),
