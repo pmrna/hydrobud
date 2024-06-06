@@ -4,6 +4,7 @@ import 'package:hydrobud/core/theme/pallete.dart';
 import 'package:hydrobud/features/analytics/presentation/widgets/logger_banner_title.dart';
 import 'package:hydrobud/features/analytics/presentation/widgets/logger_input_field.dart';
 import 'package:hydrobud/features/analytics/presentation/widgets/text_label.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoggerPage extends StatefulWidget {
   const LoggerPage({super.key});
@@ -23,11 +24,25 @@ class _LoggerPageState extends State<LoggerPage> {
     super.initState();
   }
 
+  Future<void> _insertData() async {
+    final supabase = Supabase.instance.client;
+    final response = await supabase.from('log_data').insert({
+      'total_crops': numberOfHarvestController.text,
+      'total_weight': totalWeightController.text,
+      'total_sales': totalSalesController.text,
+      'transplanted_crops': numberOfTransplantController.text
+    });
+
+    if (response != null) {
+      print('Data inserted successfully!');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: _insertData,
         backgroundColor: AppPallete.foregroundColor,
         child: const Icon(
           Icons.check,
