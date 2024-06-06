@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrobud/core/common/widgets/loader.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
-import 'package:hydrobud/core/utils/show_snackbar.dart';
 import 'package:hydrobud/features/graph/domain/entities/chart.dart';
 import 'package:hydrobud/features/graph/presentation/bloc/chart_data_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SingleBarChartWidget extends StatefulWidget {
   const SingleBarChartWidget({super.key});
@@ -39,22 +39,20 @@ class _SingleBarChartWidgetState extends State<SingleBarChartWidget> {
     context.read<ChartDataBloc>().add(FetchChartDataEvent());
   }
 
+  final _stream =
+      Supabase.instance.client.from('sensors').stream(primaryKey: ['id']);
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ChartDataBloc, ChartDataState>(
-      listener: (context, state) {
-        if (state is ChartDataFailure) {
-          showSnackbar(context, 'GraphError: ${state.message}');
+    return StreamBuilder(
+      stream: _stream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<Chart> charts =
+              snapshot.data!.map((maps) => Chart.fromMap(maps)).toList();
+          return _buildChart(charts);
         }
-      },
-      builder: (context, state) {
-        if (state is ChartDataLoading) {
-          return const Loader();
-        } else if (state is ChartDataLoaded) {
-          return _buildChart(state.chart);
-        } else {
-          return _noChartData();
-        }
+        return const Loader();
       },
     );
   }
@@ -67,7 +65,7 @@ class _SingleBarChartWidgetState extends State<SingleBarChartWidget> {
       return labelOrder.indexOf(labelA).compareTo(labelOrder.indexOf(labelB));
     });
 
-    return Column(
+    return ListView(
       children: data.map((chart) => _buildBar(chart)).toList(),
     );
   }
@@ -121,13 +119,13 @@ class _SingleBarChartWidgetState extends State<SingleBarChartWidget> {
                 width: barWidth, // Adjust the multiplier to scale the bar width
                 decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
-                  border: Border.all(color: WidgetPallete.greenAccent),
+                  border: Border.all(color: WidgetPallete.greenAccent1),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(5.0),
                   ),
                 ),
                 child: const ColoredBox(
-                  color: WidgetPallete.greenAccent,
+                  color: WidgetPallete.greenAccent1,
                 ),
               ),
             ],

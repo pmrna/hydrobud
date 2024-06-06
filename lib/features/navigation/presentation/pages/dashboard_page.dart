@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
-import 'package:hydrobud/features/navigation/presentation/widgets/banner_button.dart';
+import 'package:hydrobud/core/common/widgets/banner_button.dart';
 import 'package:hydrobud/features/navigation/presentation/widgets/home_graph_container.dart';
-import 'package:hydrobud/features/navigation/presentation/widgets/header_text.dart';
-import 'package:hydrobud/features/navigation/presentation/widgets/headings_text.dart';
+import 'package:hydrobud/core/common/widgets/header_text.dart';
+import 'package:hydrobud/core/common/widgets/headings_text.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});

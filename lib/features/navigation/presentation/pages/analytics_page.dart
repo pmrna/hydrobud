@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hydrobud/for_reuse/widget/analytics_chart/analytics_chart.dart';
+import 'package:hydrobud/core/common/widgets/header_text.dart';
+import 'package:hydrobud/core/theme/pallete.dart';
+import 'package:hydrobud/features/analytics/presentation/widgets/analytics_graph_container.dart';
+import 'package:hydrobud/features/analytics/presentation/widgets/analytics_harvest_today.dart';
+import 'package:hydrobud/features/analytics/presentation/widgets/analytics_total_graph.dart';
 
 class AnalyticsPage extends StatelessWidget {
   const AnalyticsPage({super.key});
@@ -7,16 +11,32 @@ class AnalyticsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Analytics'),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: AppPallete.foregroundColor,
+        child: const Icon(
+          Icons.filter_alt,
+          color: Colors.white,
+        ),
       ),
-      body: const Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(child: AnalyticsPageChart()),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 19, horizontal: 15),
+        child: ListView(
+          children: const [
+            HeaderText(text: 'Analytics'),
+            SizedBox(height: 10),
+            AnalyticsGraphContainer(),
+            SizedBox(height: 25),
+            Row(
+              children: [
+                AnalyticsTotalGraph(),
+                SizedBox(width: 10),
+                AnalyticsHarvestTodayGraph(),
+              ],
+            )
+          ],
+        ),
       ),
-      // rest of codes here
     );
   }
 }

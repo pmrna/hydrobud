@@ -7,13 +7,13 @@ class ChartDataModel extends Chart {
     required super.time,
   });
 
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'label': label,
-      'value': value,
-      'time': time,
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return <String, dynamic>{
+  //     'label': label,
+  //     'value': value,
+  //     'time': time,
+  //   };
+  // }
 
   factory ChartDataModel.fromJson(Map<String, dynamic> map) {
     return ChartDataModel(
