@@ -1,4 +1,3 @@
-// lib/features/irrigation/presentation/pages/lettuce_presets_page.dart
 import 'package:flutter/material.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
 import 'package:hydrobud/core/common/widgets/header_text.dart';
@@ -8,7 +7,8 @@ import 'package:hydrobud/features/irrigation/data/repositories/lettuce_preset_re
 import 'package:hydrobud/features/irrigation/domain/entities/lettuce_preset.dart';
 
 class MaintainPage extends StatefulWidget {
-  const MaintainPage({super.key});
+  final VoidCallback onFabPressed;
+  const MaintainPage({super.key, required this.onFabPressed});
 
   @override
   _MaintainPageState createState() => _MaintainPageState();
@@ -155,7 +155,7 @@ class _MaintainPageState extends State<MaintainPage> {
           onPressed: () {
             _savePreset();
             debugPrint('data uploaded');
-            Navigator.of(context).pop();
+            widget.onFabPressed();
           },
           label: const Text('Proceed', style: TextStyle(color: Colors.white)),
           icon: const Icon(
@@ -165,7 +165,6 @@ class _MaintainPageState extends State<MaintainPage> {
           backgroundColor: AppPallete.foregroundColor,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

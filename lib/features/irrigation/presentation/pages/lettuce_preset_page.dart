@@ -1,4 +1,3 @@
-// lib/features/irrigation/presentation/pages/lettuce_presets_page.dart
 import 'package:flutter/material.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
 import 'package:hydrobud/core/common/widgets/header_text.dart';
@@ -8,7 +7,9 @@ import 'package:hydrobud/features/irrigation/data/repositories/lettuce_preset_re
 import 'package:hydrobud/features/irrigation/domain/entities/lettuce_preset.dart';
 
 class LettucePresetsPage extends StatefulWidget {
-  const LettucePresetsPage({super.key});
+  final VoidCallback onFabPressed;
+
+  const LettucePresetsPage({super.key, required this.onFabPressed});
 
   @override
   _LettucePresetsPageState createState() => _LettucePresetsPageState();
@@ -145,6 +146,7 @@ class _LettucePresetsPageState extends State<LettucePresetsPage> {
           onPressed: () {
             _savePreset();
             debugPrint('data uploaded');
+            widget.onFabPressed();
             Navigator.of(context).pop();
           },
           label: const Text('Proceed', style: TextStyle(color: Colors.white)),
