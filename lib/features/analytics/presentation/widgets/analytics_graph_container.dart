@@ -49,10 +49,12 @@ class _AnalyticsGraphContainerState extends State<AnalyticsGraphContainer> {
         scalingFactor = 20.0;
     }
 
-    setState(() {
-      this.data = phValues;
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        this.data = phValues;
+        isLoading = false;
+      });
+    }
   }
 
   @override
