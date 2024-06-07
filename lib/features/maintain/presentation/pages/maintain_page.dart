@@ -3,7 +3,7 @@ import 'package:hydrobud/core/theme/pallete.dart';
 import 'package:hydrobud/core/common/widgets/header_text.dart';
 import 'package:hydrobud/features/analytics/presentation/widgets/logger_banner_title.dart';
 import 'package:hydrobud/features/irrigation/presentation/widgets/irrigation_text_field.dart';
-import 'package:hydrobud/features/irrigation/data/repositories/lettuce_preset_repository_impl.dart';
+import 'package:hydrobud/features/maintain/repositories/maintain_preset_repository_impl.dart';
 import 'package:hydrobud/features/irrigation/domain/entities/lettuce_preset.dart';
 
 class MaintainPage extends StatefulWidget {
@@ -21,7 +21,7 @@ class _MaintainPageState extends State<MaintainPage> {
   final _waterTemperatureController = TextEditingController(text: '24.0');
   final _litersOfWaterController = TextEditingController(text: '70');
 
-  final _repository = IrrigationRepositoryImpl();
+  final _repository = MaintainRepositoryImpl();
 
   @override
   void dispose() {
