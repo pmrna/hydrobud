@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hydrobud/features/maintain/presentation/pages/maintain_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/analytics_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/dashboard_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/history_page.dart';
@@ -16,13 +17,35 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   int _selectedIndex = 0;
 
-  static List<Widget> _pages = <Widget>[
-    DashboardPage(),
-    HistoryPage(),
-    IrrigationPage(),
-    AnalyticsPage(),
-    LoggerPage(),
-  ];
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = <Widget>[
+      const DashboardPage(),
+      const HistoryPage(),
+      IrrigationPage(onFabPressed: _changeToMaintainPage),
+      const AnalyticsPage(),
+      const LoggerPage(),
+    ];
+  }
+
+  void _changeToMaintainPage() {
+    setState(() {
+      _pages[2] = MaintainPage(
+        onFabPressed: _changeToIrrigationPage,
+      );
+      _selectedIndex = 2;
+    });
+  }
+
+  void _changeToIrrigationPage() {
+    setState(() {
+      _pages[2] = IrrigationPage(onFabPressed: _changeToMaintainPage);
+      _selectedIndex = 0;
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -46,7 +69,7 @@ class _WrapperState extends State<Wrapper> {
               right: 12,
             ),
             child: CircleAvatar(
-              backgroundImage: AssetImage('assets/mascot/mascot.png'),
+              backgroundImage: AssetImage('lib/core/assets/mascot/mascot.png'),
               radius: 20,
             ),
           ),

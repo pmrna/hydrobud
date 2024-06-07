@@ -3,10 +3,10 @@ import 'package:hydrobud/features/irrigation/domain/entities/lettuce_preset.dart
 import 'package:hydrobud/features/irrigation/domain/repositories/irrigation_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class IrrigationRepositoryImpl implements IrrigationRepository {
+class MaintainRepositoryImpl implements IrrigationRepository {
   final SupabaseClient _supabaseClient;
 
-  IrrigationRepositoryImpl()
+  MaintainRepositoryImpl()
       : _supabaseClient = SupabaseClientInstance.supabaseClient;
 
   @override
@@ -18,7 +18,7 @@ class IrrigationRepositoryImpl implements IrrigationRepository {
       'liters_of_water': preset.litersOfWater,
       'isContinuing': "false",
       'crop_name': "lettuce",
-      'irrig_instruction': "true"
+      'irrig_instruction': "false"
     }).eq('id', 1);
   }
 }

@@ -8,15 +8,18 @@ import 'package:hydrobud/core/common/widgets/header_text.dart';
 
 class IrrigationPage extends StatelessWidget {
   final IrrigationRepository repository = IrrigationRepository();
+  final VoidCallback onFabPressed;
 
-  IrrigationPage({super.key});
+  IrrigationPage({super.key, required this.onFabPressed});
 
   void navigateToPresetPage(BuildContext context, int index) {
     switch (index) {
       case 0:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const LettucePresetsPage()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  LettucePresetsPage(onFabPressed: onFabPressed)),
         );
         break;
       case 1:

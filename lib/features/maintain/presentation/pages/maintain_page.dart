@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
 import 'package:hydrobud/core/common/widgets/header_text.dart';
-import 'package:hydrobud/core/common/widgets/labels_text.dart';
+import 'package:hydrobud/features/analytics/presentation/widgets/logger_banner_title.dart';
 import 'package:hydrobud/features/irrigation/presentation/widgets/irrigation_text_field.dart';
-import 'package:hydrobud/features/irrigation/data/repositories/lettuce_preset_repository_impl.dart';
+import 'package:hydrobud/features/maintain/repositories/maintain_preset_repository_impl.dart';
 import 'package:hydrobud/features/irrigation/domain/entities/lettuce_preset.dart';
 
-class LettucePresetsPage extends StatefulWidget {
+class MaintainPage extends StatefulWidget {
   final VoidCallback onFabPressed;
-
-  const LettucePresetsPage({super.key, required this.onFabPressed});
+  const MaintainPage({super.key, required this.onFabPressed});
 
   @override
-  _LettucePresetsPageState createState() => _LettucePresetsPageState();
+  _MaintainPageState createState() => _MaintainPageState();
 }
 
-class _LettucePresetsPageState extends State<LettucePresetsPage> {
+class _MaintainPageState extends State<MaintainPage> {
   final _formKey = GlobalKey<FormState>();
   final _phLevelController = TextEditingController(text: '6.0');
   final _waterConcentrationController = TextEditingController(text: '1.5');
   final _waterTemperatureController = TextEditingController(text: '24.0');
   final _litersOfWaterController = TextEditingController(text: '70');
 
-  final _repository = IrrigationRepositoryImpl();
+  final _repository = MaintainRepositoryImpl();
 
   @override
   void dispose() {
@@ -71,16 +70,37 @@ class _LettucePresetsPageState extends State<LettucePresetsPage> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Center(
                   child: HeaderText(
-                    text: "Lettuce",
+                    text: "Maintaining",
+                  ),
+                ),
+                const SizedBox(height: 22),
+                const Text(
+                  'Transplant Data',
+                  textAlign: TextAlign.end,
+                ),
+                const Text(
+                  'June 07, 2024',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 35),
+                const BannerTitle(),
+                const SizedBox(height: 35),
+                const Text(
+                  'Maintainance Settings',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 30),
-                const LabelText(text: 'Preset'),
-                const SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(
@@ -124,17 +144,6 @@ class _LettucePresetsPageState extends State<LettucePresetsPage> {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 50.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const LabelText(text: 'Recommendation'),
-                      const SizedBox(height: 20),
-                      Image.asset('lib/core/assets/images/letus-rec.png'),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
@@ -147,7 +156,6 @@ class _LettucePresetsPageState extends State<LettucePresetsPage> {
             _savePreset();
             debugPrint('data uploaded');
             widget.onFabPressed();
-            Navigator.of(context).pop();
           },
           label: const Text('Proceed', style: TextStyle(color: Colors.white)),
           icon: const Icon(
@@ -157,7 +165,6 @@ class _LettucePresetsPageState extends State<LettucePresetsPage> {
           backgroundColor: AppPallete.foregroundColor,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
