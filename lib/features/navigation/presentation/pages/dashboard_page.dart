@@ -11,7 +11,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 24),
+      padding: const EdgeInsets.all(20.0),
       children: const [
         HeaderText(text: 'Dashboard'),
         SizedBox(height: 20),

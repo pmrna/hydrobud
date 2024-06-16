@@ -22,9 +22,10 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     if (hasData == true) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 19, horizontal: 15),
+        padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: const [
+            SizedBox(height: 20),
             HeaderText(text: 'History'),
             SizedBox(height: 30),
             BannerButton(),
