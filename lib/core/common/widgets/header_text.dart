@@ -11,6 +11,7 @@ class HeaderText extends StatelessWidget {
       style: const TextStyle(
         fontSize: 30,
         fontWeight: FontWeight.w900,
+        letterSpacing: -1,
       ),
     );
   }

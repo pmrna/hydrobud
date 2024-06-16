@@ -11,9 +11,13 @@ class BannerTitle extends StatelessWidget {
         height: 110,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage('assets/lettuce-banner.jpg'),
+          image: DecorationImage(
+            image: const AssetImage('lib/core/assets/images/lettuce_bg.jpg'),
             fit: BoxFit.fitWidth,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.4),
+              BlendMode.darken,
+            ),
           ),
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(5),
@@ -32,7 +36,7 @@ class BannerTitle extends StatelessWidget {
             'Harvest #1 -\nLettuce',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 32,
+              fontSize: 30,
               fontWeight: FontWeight.w900,
               color: Colors.white,
               shadows: [

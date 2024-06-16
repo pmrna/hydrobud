@@ -15,6 +15,8 @@ class _AnalyticsGraphContainerState extends State<AnalyticsGraphContainer> {
   bool isLoading = true;
   List<double> data = [];
   double scalingFactor = 1.0; // Default scaling factor
+  Offset? tapPosition; // Store tap position of the tapped bar
+  int? tappedIndex; // Store the index of the tapped bar
 
   @override
   void initState() {
@@ -29,9 +31,10 @@ class _AnalyticsGraphContainerState extends State<AnalyticsGraphContainer> {
         .select('value')
         .order('created_at', ascending: false)
         .limit(12);
-    print(response);
+    debugPrint(response.toString());
 
     final data = response;
+
     final phValues = data
         .map((e) => e['value'] as num?)
         .where((value) => value != null)
@@ -43,7 +46,10 @@ class _AnalyticsGraphContainerState extends State<AnalyticsGraphContainer> {
         scalingFactor = 1.0;
         break;
       case 'water_level':
-        scalingFactor = 0.2;
+        scalingFactor = 1;
+        break;
+      case 'ec':
+        scalingFactor = 100.0;
         break;
       default:
         scalingFactor = 20.0;
@@ -51,7 +57,8 @@ class _AnalyticsGraphContainerState extends State<AnalyticsGraphContainer> {
 
     if (mounted) {
       setState(() {
-        this.data = phValues;
+        this.data =
+            phValues.reversed.toList(); // Reverse the order of the values
         isLoading = false;
       });
     }
@@ -74,133 +81,152 @@ class _AnalyticsGraphContainerState extends State<AnalyticsGraphContainer> {
           )
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 10.0,
-              horizontal: 15.0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Water qualities',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: AppPallete.textColorBlack,
-                        letterSpacing: -1,
-                      ),
-                    ),
-                    Text(
-                      'Last 12 hours',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppPallete.textColorBlack.withOpacity(0.5),
-                        letterSpacing: -0.25,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Water qualities',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: AppPallete.textColorBlack,
+                            letterSpacing: -1,
+                          ),
+                        ),
+                        Text(
+                          'Last 12 hours',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppPallete.textColorBlack.withOpacity(0.5),
+                            letterSpacing: -0.25,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Container(
-            height: 207,
-            color: Colors.white,
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : Padding(
-                    padding: const EdgeInsets.fromLTRB(50, 0, 5, 25),
-                    child: CustomPaint(
-                      painter: BarChartPainter(
-                          data: data, scalingFactor: scalingFactor),
+              ),
+              Container(
+                height: 207,
+                color: Colors.white,
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Padding(
+                        padding: const EdgeInsets.fromLTRB(50, 0, 5, 25),
+                        child: CustomPaint(
+                          painter: _BarChartPainter(
+                            data: data,
+                            scalingFactor: scalingFactor,
+                          ),
+                        ),
+                      ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 30,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GraphOutlinedButton(
+                      onTap: () {
+                        fetchData('ph');
+                      },
+                      text: 'PH',
+                      borderColor: WidgetPallete.greenStroke,
                     ),
-                  ),
+                    GraphOutlinedButton(
+                      onTap: () {
+                        fetchData('ec');
+                      },
+                      text: 'EC',
+                      borderColor: WidgetPallete.yellowstroke,
+                    ),
+                    GraphOutlinedButton(
+                      onTap: () {
+                        fetchData('water_temp');
+                      },
+                      text: 'TEMP',
+                      borderColor: WidgetPallete.pinkStroke,
+                    ),
+                    GraphOutlinedButton(
+                      onTap: () {
+                        fetchData('water_level');
+                      },
+                      text: 'LEVEL',
+                      borderColor: WidgetPallete.blueStroke,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 10,
-              horizontal: 30,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GraphOutlinedButton(
-                  onTap: () {
-                    fetchData('ph');
-                  },
-                  text: 'PH',
-                  borderColor: WidgetPallete.greenStroke,
-                ),
-                GraphOutlinedButton(
-                  onTap: () {
-                    fetchData('ec');
-                  },
-                  text: 'PPM',
-                  borderColor: WidgetPallete.yellowstroke,
-                ),
-                GraphOutlinedButton(
-                  onTap: () {
-                    fetchData('water_temp');
-                  },
-                  text: 'TEMP',
-                  borderColor: WidgetPallete.pinkStroke,
-                ),
-                GraphOutlinedButton(
-                  onTap: () {
-                    fetchData('water_level');
-                  },
-                  text: 'LEVEL',
-                  borderColor: WidgetPallete.blueStroke,
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );
   }
 }
 
-// TODO: SEPERATE BUILDER FOR EACH PARAMS
-
-class BarChartPainter extends CustomPainter {
+class _BarChartPainter extends CustomPainter {
   final List<double> data;
   final double scalingFactor;
 
-  BarChartPainter({required this.data, required this.scalingFactor});
+  _BarChartPainter({
+    required this.data,
+    required this.scalingFactor,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppPallete.foregroundColor
+      ..color = WidgetPallete.greenAccent1
       ..style = PaintingStyle.fill;
 
-    const barWidth = 17.0;
-    final spaceBetweenBars = (size.width - (12 * barWidth)) / 15;
+    final totalBars = data.length;
+    final availableWidth = size.width;
+    final totalSpacing = availableWidth / 5;
+    final barWidth = (availableWidth - totalSpacing) / totalBars;
+    final spaceBetweenBars =
+        (availableWidth - (totalBars * barWidth)) / (totalBars + 1);
 
     final textPainter = TextPainter(
-      textAlign: TextAlign.center,
+      textAlign: TextAlign.start,
       textDirection: TextDirection.ltr,
     );
 
-    const textStyle = TextStyle(
-      color: Colors.black,
+    const bottomTextStyle = TextStyle(
+      color: AppPallete.textColorBlack,
       fontSize: 14,
       fontWeight: FontWeight.bold,
     );
 
+    const leftTextStyle = TextStyle(
+      color: AppPallete.textColorBlack2,
+      fontSize: 15,
+      fontWeight: FontWeight.bold,
+    );
+
+    final maxBarHeight = size.height - 20;
+
+    final maxValue = data.reduce((a, b) => a > b ? a : b);
+
     // Draw the bars
     for (int i = 0; i < data.length; i++) {
-      final barHeight = data[i] * scalingFactor; // Scaling factor for height
-      final x = i * (barWidth + spaceBetweenBars);
+      final barHeight = (data[i] / maxValue) * maxBarHeight;
+      final x = (i + 1) * spaceBetweenBars + i * barWidth;
       final y = size.height - barHeight;
 
       final roundedRect = RRect.fromRectAndRadius(
@@ -216,7 +242,7 @@ class BarChartPainter extends CustomPainter {
       // Draw the bottom labels (X-axis)
       final bottomTextSpan = TextSpan(
         text: '${i + 1}h',
-        style: textStyle,
+        style: bottomTextStyle,
       );
 
       textPainter.text = bottomTextSpan;
@@ -227,20 +253,22 @@ class BarChartPainter extends CustomPainter {
       textPainter.paint(canvas, Offset(bottomX, bottomY));
     }
 
-    // Draw the left titles (Y-axis labels)
-    const yAxisLabels = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0];
+    const numYLabels = 5; // Number of Y-axis labels
+    final interval = maxValue / numYLabels;
 
-    for (int i = 0; i < yAxisLabels.length; i++) {
-      final yAxisLabel = yAxisLabels[i];
+    for (int i = 0; i <= numYLabels; i++) {
+      final yAxisLabel = (i * interval).toStringAsFixed(1);
       final yAxisTextSpan = TextSpan(
-        text: yAxisLabel.toString(),
-        style: textStyle,
+        text: yAxisLabel,
+        style: leftTextStyle,
       );
 
       textPainter.text = yAxisTextSpan;
       textPainter.layout();
-      const yAxisX = -30;
-      final yAxisY = size.height - (yAxisLabel * 20) - textPainter.height / 2;
+      const yAxisX = -40;
+      final yAxisY = size.height -
+          (i * (interval / maxValue) * maxBarHeight) -
+          textPainter.height / 2;
 
       textPainter.paint(canvas, Offset(yAxisX.toDouble(), yAxisY));
     }

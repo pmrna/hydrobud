@@ -23,44 +23,43 @@ class IrrigationCard extends StatelessWidget {
         onTap: onTap,
         child: Container(
           alignment: Alignment.center,
-          height: 140,
+          height: 115,
           decoration: BoxDecoration(
-            color: borderColor,
-            border: Border.all(
               color: borderColor,
-              width: 6,
-            ),
-            borderRadius: BorderRadius.circular(12.0),
-            image: DecorationImage(
-              image: AssetImage(imagePath),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.4),
-                BlendMode.darken,
+              border: Border.all(
+                color: borderColor,
+                width: 4,
               ),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 45.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    shadows: [
-                      Shadow(
-                        color: Colors.black,
-                        blurRadius: 5,
-                        offset: Offset(0, 3),
-                      )
-                    ],
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+              borderRadius: BorderRadius.circular(5.0),
+              image: DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.4),
+                  BlendMode.darken,
                 ),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.4),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: const Offset(1, 4),
+                ),
+              ]),
+          child: Text(
+            title,
+            style: const TextStyle(
+              shadows: [
+                Shadow(
+                  color: Colors.black,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                )
               ],
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ),

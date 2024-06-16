@@ -13,10 +13,12 @@ class TotalLabelText extends StatelessWidget {
     return Text(
       text,
       style: const TextStyle(
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: FontWeight.bold,
         color: AppPallete.textColorBlack,
+        letterSpacing: -1,
       ),
+      textAlign: TextAlign.center,
     );
   }
 }

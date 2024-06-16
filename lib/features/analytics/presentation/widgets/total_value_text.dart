@@ -16,6 +16,7 @@ class TotalValueText extends StatelessWidget {
         fontWeight: FontWeight.w800,
         color: Colors.white,
       ),
+      textAlign: TextAlign.center,
     );
   }
 }

@@ -16,18 +16,18 @@ class SingleBarChartWidget extends StatefulWidget {
 class _SingleBarChartWidgetState extends State<SingleBarChartWidget> {
   final Map<String, String> labelMapping = {
     'ph_sensor': 'PH',
-    'TDS_sensor': 'PPM',
+    'TDS_sensor': 'EC',
     'Water_temp_sensor': 'TEMP (°C)',
     'Water_level_sensor': 'LEVEL (cm)',
   };
 
   // order of labels
-  final List<String> labelOrder = ['PH', 'PPM', 'TEMP (°C)', 'LEVEL (cm)'];
+  final List<String> labelOrder = ['PH', 'EC', 'TEMP (°C)', 'LEVEL (cm)'];
 
   // scaling of bar
   final Map<String, double> scalingFactors = {
     'PH': 40.0,
-    'PPM': 40.0,
+    'EC': 40.0,
     'TEMP (°C)': 10.0,
     'LEVEL (cm)': 1.0,
   };
@@ -135,9 +135,9 @@ class _SingleBarChartWidgetState extends State<SingleBarChartWidget> {
     );
   }
 
-  Widget _noChartData() {
-    return const Center(
-      child: Text('No chart data available'),
-    );
-  }
+  // Widget _noChartData() {
+  //   return const Center(
+  //     child: Text('No chart data available'),
+  //   );
+  // }
 }
