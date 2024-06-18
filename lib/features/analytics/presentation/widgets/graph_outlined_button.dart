@@ -23,7 +23,7 @@ class GraphOutlinedButton extends StatelessWidget {
         width: 56,
         height: 30,
         decoration: BoxDecoration(
-          color: color ?? WidgetPallete.graphContainerColor, // background color
+          color: color ?? WidgetPallete.greenAccent4, // background color
           borderRadius: BorderRadius.circular(5),
           border: Border.all(
             color: borderColor,

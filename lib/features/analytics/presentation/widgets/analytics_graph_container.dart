@@ -70,7 +70,7 @@ class _AnalyticsGraphContainerState extends State<AnalyticsGraphContainer> {
       width: 346,
       height: 335,
       decoration: BoxDecoration(
-        color: WidgetPallete.graphContainerColor,
+        color: WidgetPallete.greenAccent4,
         borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
@@ -120,7 +120,7 @@ class _AnalyticsGraphContainerState extends State<AnalyticsGraphContainer> {
               ),
               Container(
                 height: 207,
-                color: Colors.white,
+                color: AppPallete.whiteColor,
                 child: isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : Padding(

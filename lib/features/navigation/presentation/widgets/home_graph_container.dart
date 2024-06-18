@@ -11,7 +11,7 @@ class HomeGraphContainer extends StatelessWidget {
       width: 346,
       height: 335,
       decoration: BoxDecoration(
-        color: WidgetPallete.graphContainerColor,
+        color: WidgetPallete.greenAccent4,
         borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
@@ -60,11 +60,10 @@ class HomeGraphContainer extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(
+          Container(
             height: 220,
-            child: Scaffold(
-              body: SingleBarChartWidget(),
-            ),
+            color: AppPallete.whiteColor,
+            child: const SingleBarChartWidget(),
           ),
         ],
       ),

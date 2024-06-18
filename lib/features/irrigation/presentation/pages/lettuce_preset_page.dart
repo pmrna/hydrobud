@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
 import 'package:hydrobud/core/common/widgets/header_text.dart';
 import 'package:hydrobud/core/common/widgets/labels_text.dart';
+import 'package:hydrobud/features/irrigation/presentation/pages/processing_page.dart';
 import 'package:hydrobud/features/irrigation/presentation/widgets/irrigation_text_field.dart';
 import 'package:hydrobud/features/irrigation/data/repositories/lettuce_preset_repository_impl.dart';
 import 'package:hydrobud/features/irrigation/domain/entities/lettuce_preset.dart';
+
+import '../widgets/recommendation_chart.dart';
 
 class LettucePresetsPage extends StatefulWidget {
   final VoidCallback onFabPressed;
@@ -17,10 +20,10 @@ class LettucePresetsPage extends StatefulWidget {
 
 class _LettucePresetsPageState extends State<LettucePresetsPage> {
   final _formKey = GlobalKey<FormState>();
-  final _phLevelController = TextEditingController(text: '6.0');
-  final _waterConcentrationController = TextEditingController(text: '1.5');
-  final _waterTemperatureController = TextEditingController(text: '24.0');
-  final _litersOfWaterController = TextEditingController(text: '70');
+  final _phLevelController = TextEditingController();
+  final _waterConcentrationController = TextEditingController();
+  final _waterTemperatureController = TextEditingController();
+  final _litersOfWaterController = TextEditingController();
 
   final _repository = IrrigationRepositoryImpl();
 
@@ -33,21 +36,40 @@ class _LettucePresetsPageState extends State<LettucePresetsPage> {
     super.dispose();
   }
 
-  Future<void> _savePreset() async {
-    if (_formKey.currentState!.validate()) {
-      final preset = IrrigationPreset(
+  IrrigationPreset? _createPreset() {
+    try {
+      return IrrigationPreset(
         phLevel: double.parse(_phLevelController.text),
         waterConcentration: double.parse(_waterConcentrationController.text),
         waterTemperature: double.parse(_waterTemperatureController.text),
         litersOfWater: int.parse(_litersOfWaterController.text),
       );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid input: $e')),
+      );
+      return null;
+    }
+  }
+
+  Future<void> _savePreset() async {
+    if (_formKey.currentState!.validate()) {
+      final preset = _createPreset();
+      if (preset == null) return;
 
       try {
         await _repository.savePreset(preset);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Preset saved successfully')),
+          );
+        }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to save preset: $e')),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to save preset: $e')),
+          );
+        }
       }
     }
   }
@@ -58,106 +80,94 @@ class _LettucePresetsPageState extends State<LettucePresetsPage> {
       appBar: AppBar(
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_sharp),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ),
       resizeToAvoidBottomInset: true,
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(20.0),
+          children: [
+            const HeaderText(
+              text: "Lettuce",
+            ),
+            const SizedBox(height: 30),
+            const LabelText(text: 'Preset'),
+            const SizedBox(height: 30),
+            Row(
               children: [
-                const Center(
-                  child: HeaderText(
-                    text: "Lettuce",
+                Expanded(
+                  child: CustomTextField(
+                    hintText: 'Enter PH level',
+                    labelText: 'PH level',
+                    backgroundColor: WidgetPallete.greenAccent1,
+                    borderColor: WidgetPallete.greenAccent2,
+                    controller: _phLevelController,
                   ),
                 ),
-                const SizedBox(height: 30),
-                const LabelText(text: 'Preset'),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        labelText: 'pH Level',
-                        backgroundColor: Colors.green.shade50,
-                        borderColor: Colors.green,
-                        controller: _phLevelController,
-                      ),
-                    ),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                      child: CustomTextField(
-                        labelText: 'Water Concentration',
-                        backgroundColor: Colors.yellow.shade50,
-                        borderColor: Colors.yellow,
-                        controller: _waterConcentrationController,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16.0),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        labelText: 'Water Temperature',
-                        backgroundColor: Colors.red.shade50,
-                        borderColor: Colors.red,
-                        controller: _waterTemperatureController,
-                      ),
-                    ),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                      child: CustomTextField(
-                        labelText: 'Liters of Water',
-                        backgroundColor: Colors.blue.shade50,
-                        borderColor: Colors.blue,
-                        controller: _litersOfWaterController,
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 50.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const LabelText(text: 'Recommendation'),
-                      const SizedBox(height: 20),
-                      Image.asset('lib/core/assets/images/letus-rec.png'),
-                    ],
+                const SizedBox(width: 10),
+                Expanded(
+                  child: CustomTextField(
+                    hintText: 'Enter EC value',
+                    labelText: 'Water concentration',
+                    backgroundColor: WidgetPallete.yellowAccent,
+                    borderColor: WidgetPallete.yellowstroke,
+                    controller: _waterConcentrationController,
                   ),
                 ),
               ],
             ),
-          ),
+            const SizedBox(height: 15.0),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomTextField(
+                    hintText: 'Enter temperature',
+                    labelText: 'Water temperature',
+                    backgroundColor: WidgetPallete.pinkAccent,
+                    borderColor: WidgetPallete.pinkStroke,
+                    controller: _waterTemperatureController,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: CustomTextField(
+                    hintText: 'Enter liters of water',
+                    labelText: 'Liters of water',
+                    backgroundColor: WidgetPallete.blueAccent,
+                    borderColor: WidgetPallete.blueStroke,
+                    controller: _litersOfWaterController,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            const LabelText(text: 'Recommendations'),
+            const SizedBox(height: 30),
+            const RecommendationChart(),
+          ],
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 16.0, right: 16.0),
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            _savePreset();
-            debugPrint('data uploaded');
-            widget.onFabPressed();
-            Navigator.of(context).pop();
-          },
-          label: const Text('Proceed', style: TextStyle(color: Colors.white)),
-          icon: const Icon(
-            Icons.check,
-            color: Colors.white,
-          ),
-          backgroundColor: AppPallete.foregroundColor,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _savePreset();
+          debugPrint('Lettuce irrigation preset uploaded');
+          // widget.onFabPressed();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const ProcessingIrrigationPage()));
+        },
+        backgroundColor: AppPallete.foregroundColor,
+        child: const Icon(
+          Icons.check,
+          color: Colors.white,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
