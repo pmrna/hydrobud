@@ -69,15 +69,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             label: 'Analytics',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.book,
-              color: widget.selectedIndex == 4
-                  ? AppPallete.focusColor
-                  : AppPallete.unfocusColor,
-            ),
-            label: 'Logger',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     Icons.book,
+          //     color: widget.selectedIndex == 4
+          //         ? AppPallete.focusColor
+          //         : AppPallete.unfocusColor,
+          //   ),
+          //   label: 'Logger',
+          // ),
         ],
         currentIndex: widget.selectedIndex,
         selectedItemColor: AppPallete.focusColor,

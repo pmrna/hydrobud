@@ -17,7 +17,7 @@ class IrrigationRepositoryImpl implements IrrigationRepository {
       'water_temperature': preset.waterTemperature,
       'liters_of_water': preset.litersOfWater,
       'isContinuing': "false",
-      'crop_name': "lettuce",
+      'crop_name': "Lettuce",
       'irrig_instruction': "true"
     }).eq('id', 1);
   }

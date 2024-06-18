@@ -4,7 +4,7 @@ import 'package:hydrobud/features/navigation/presentation/pages/analytics_page.d
 import 'package:hydrobud/features/navigation/presentation/pages/dashboard_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/history_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/irrigation_page.dart';
-import 'package:hydrobud/features/navigation/presentation/pages/logger_page.dart';
+// import 'package:hydrobud/features/navigation/presentation/pages/logger_page.dart';
 import 'package:hydrobud/features/navigation/presentation/widgets/bottom_navbar_widget.dart';
 
 class Wrapper extends StatefulWidget {
@@ -27,7 +27,7 @@ class _WrapperState extends State<Wrapper> {
       const HistoryPage(),
       IrrigationPage(onFabPressed: _changeToMaintainPage),
       const AnalyticsPage(),
-      const LoggerPage(),
+      //const LoggerPage(),
     ];
   }
 

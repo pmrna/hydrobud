@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/core/common/widgets/banner_button.dart';
 import 'package:hydrobud/core/common/widgets/header_text.dart';
+import 'package:hydrobud/core/theme/pallete.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -10,7 +11,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  final hasData = true;
+  final hasData = false;
 
   @override
   void initState() {
@@ -40,7 +41,32 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Widget _buildNoData() {
     return const Center(
-      child: Text('No data available :('),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image(
+            image: AssetImage('lib/core/assets/mascot/no_data_mascot.png'),
+          ),
+          Text(
+            'You have no history :(',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+              color: AppPallete.textColorBlack,
+            ),
+          ),
+          Text(
+            'Start harvesting crops to fill\nup this page.',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: AppPallete.textColorGray,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

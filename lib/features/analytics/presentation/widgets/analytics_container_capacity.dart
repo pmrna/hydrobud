@@ -28,7 +28,7 @@ class _AnalyticsCapacityGraphState extends State<AnalyticsCapacityGraph> {
     return Container(
       height: 280,
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: AppPallete.whiteColor,
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         border: Border.all(
           color: WidgetPallete.greenStroke,

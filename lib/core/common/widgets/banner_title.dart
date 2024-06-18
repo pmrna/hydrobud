@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
 
-class LoggerBannerTitle extends StatelessWidget {
-  final int id;
-  final String cropName;
-  const LoggerBannerTitle({
-    super.key,
-    required this.id,
-    required this.cropName,
-  });
+class BannerTitle extends StatelessWidget {
+  final String text;
+  final String imagePath;
+  const BannerTitle({super.key, required this.text, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 346,
+        width: 340,
         height: 110,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: const AssetImage('lib/core/assets/images/lettuce_bg.jpg'),
+            image: AssetImage(imagePath),
             fit: BoxFit.fitWidth,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.4),
@@ -28,18 +24,18 @@ class LoggerBannerTitle extends StatelessWidget {
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(5),
           border: Border.all(color: WidgetPallete.greenAccent3, width: 5),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Colors.black,
+              color: Colors.black.withOpacity(0.4),
               spreadRadius: 2,
               blurRadius: 4,
-              offset: Offset(0, 4),
+              offset: const Offset(1, 4),
             )
           ],
         ),
         child: Center(
           child: Text(
-            'Harvest #$id -\n$cropName',
+            text,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 30,

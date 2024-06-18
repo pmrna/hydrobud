@@ -1,16 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:hydrobud/features/maintain/presentation/pages/maintain_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../widgets/irrigation_card.dart';
 import 'package:hydrobud/features/irrigation/presentation/pages/lettuce_preset_page.dart';
 import 'package:hydrobud/features/irrigation/presentation/pages/bellpepper_presets_page.dart';
-import 'package:hydrobud/features/irrigation/presentation/pages/eegplant_presets_page.dart';
+import 'package:hydrobud/features/irrigation/presentation/pages/eggplant_presets_page.dart';
 import 'package:hydrobud/features/irrigation/data/repositories/irrigation_repository.dart';
 import 'package:hydrobud/core/common/widgets/header_text.dart';
 
-class IrrigationPage extends StatelessWidget {
-  final IrrigationRepository repository = IrrigationRepository();
+class IrrigationPage extends StatefulWidget {
   final VoidCallback onFabPressed;
 
   IrrigationPage({super.key, required this.onFabPressed});
+
+  @override
+  State<IrrigationPage> createState() => _IrrigationPageState();
+}
+
+class _IrrigationPageState extends State<IrrigationPage> {
+  final IrrigationRepository repository = IrrigationRepository();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIsOngoing();
+  }
+
+  Future<void> _checkIsOngoing() async {
+    final supabase = Supabase.instance.client;
+    final response =
+        await supabase.from('irrigation_presets').select('is_ongoing');
+
+    final isOngoing = response[0]['is_ongoing'];
+
+    if (isOngoing == true) {
+      if (mounted) {
+        //TODO: Loading page after navigating to maintain page
+        setState(() {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MaintainPage(onFabPressed: () {})),
+          );
+        });
+      }
+    }
+  }
 
   void navigateToPresetPage(BuildContext context, int index) {
     switch (index) {
@@ -19,20 +54,23 @@ class IrrigationPage extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  LettucePresetsPage(onFabPressed: onFabPressed)),
+                  LettucePresetsPage(onFabPressed: widget.onFabPressed)),
         );
         break;
       case 1:
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => const BellpepperPresetsPage()),
+              builder: (context) =>
+                  BellpepperPresetsPage(onFabPressed: widget.onFabPressed)),
         );
         break;
       case 2:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const EggplantPresetsPage()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  EggplantPresetsPage(onFabPressed: widget.onFabPressed)),
         );
         break;
       default:

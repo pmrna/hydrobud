@@ -9,16 +9,16 @@ import 'package:hydrobud/features/irrigation/domain/entities/lettuce_preset.dart
 
 import '../widgets/recommendation_chart.dart';
 
-class BellpepperPresetsPage extends StatefulWidget {
+class EggplantPresetsPage extends StatefulWidget {
   final VoidCallback onFabPressed;
 
-  const BellpepperPresetsPage({super.key, required this.onFabPressed});
+  const EggplantPresetsPage({super.key, required this.onFabPressed});
 
   @override
-  _BellpepperPresetsPageState createState() => _BellpepperPresetsPageState();
+  _EggplantPresetsPageState createState() => _EggplantPresetsPageState();
 }
 
-class _BellpepperPresetsPageState extends State<BellpepperPresetsPage> {
+class _EggplantPresetsPageState extends State<EggplantPresetsPage> {
   final _formKey = GlobalKey<FormState>();
   final _phLevelController = TextEditingController();
   final _waterConcentrationController = TextEditingController();
@@ -93,7 +93,7 @@ class _BellpepperPresetsPageState extends State<BellpepperPresetsPage> {
           padding: const EdgeInsets.all(20.0),
           children: [
             const HeaderText(
-              text: "Bell pepper",
+              text: "Eggplant",
             ),
             const SizedBox(height: 30),
             const LabelText(text: 'Preset'),
