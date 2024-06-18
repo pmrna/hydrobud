@@ -18,7 +18,8 @@ class LoggerBannerTitle extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: const AssetImage('lib/core/assets/images/lettuce_bg.jpg'),
+            image: const AssetImage(
+                'lib/core/assets/images/hydroponics_harvest_bg.jpg'),
             fit: BoxFit.fitWidth,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.4),

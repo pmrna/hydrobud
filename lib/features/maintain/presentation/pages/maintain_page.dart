@@ -96,6 +96,23 @@ class _MaintainPageState extends State<MaintainPage> {
     }
   }
 
+  Future<void> _onCancel() async {
+    final supabase = Supabase.instance.client;
+
+    await supabase
+        .from('irrigation_presets')
+        .update({'is_ongoing': false}).eq('id', 1);
+
+    if (mounted) {
+      setState(() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Wrapper()),
+        );
+      });
+    }
+  }
+
   Future<void> _proceed() async {
     final supabase = Supabase.instance.client;
 
@@ -129,7 +146,9 @@ class _MaintainPageState extends State<MaintainPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              _onCancel();
+            },
             child: const Text(
               'Cancel',
               style: TextStyle(
