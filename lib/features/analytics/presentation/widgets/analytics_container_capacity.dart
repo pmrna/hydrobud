@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hydrobud/core/common/widgets/loader.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AnalyticsCapacityGraph extends StatefulWidget {
   const AnalyticsCapacityGraph({super.key});
@@ -9,24 +11,136 @@ class AnalyticsCapacityGraph extends StatefulWidget {
 }
 
 class _AnalyticsCapacityGraphState extends State<AnalyticsCapacityGraph> {
+  static const double totalCapacity = 500; // setter for total capacity
+
+  final _stream = Supabase.instance.client
+      .from('container_capacity')
+      .stream(primaryKey: ['id']);
+
+  final Map<String, String> labelMapping = {
+    'nutrient_a': 'Solution A',
+    'nutrient_b': 'Solution B',
+    'pH_up': 'PH Up',
+    'pH_down': 'PH Down',
+  };
+
   @override
   void initState() {
     super.initState();
   }
 
-  static const double totalCapacity = 500;
+  void _showRefillDialog(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+    final TextEditingController nutrientAController = TextEditingController();
+    final TextEditingController nutrientBController = TextEditingController();
+    final TextEditingController phUpController = TextEditingController();
+    final TextEditingController phDownController = TextEditingController();
 
-  final List<Map<String, dynamic>> data = [
-    {'label': 'Solution A', 'value': 130},
-    {'label': 'Solution B', 'value': 320},
-    {'label': 'pH Up', 'value': 440},
-    {'label': 'pH Down', 'value': 50},
-  ];
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Refill Containers'),
+          content: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  TextFormField(
+                    controller: nutrientAController,
+                    decoration: const InputDecoration(
+                      labelText: 'Solution A',
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  TextFormField(
+                    controller: nutrientBController,
+                    decoration: const InputDecoration(
+                      labelText: 'Solution B',
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  TextFormField(
+                    controller: phUpController,
+                    decoration: const InputDecoration(
+                      labelText: 'PH Up',
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  TextFormField(
+                    controller: phDownController,
+                    decoration: const InputDecoration(
+                      labelText: 'PH Down',
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  final supabase = Supabase.instance.client;
+
+                  final updates = [
+                    {'controller': nutrientAController, 'name': 'nutrient_a'},
+                    {'controller': nutrientBController, 'name': 'nutrient_b'},
+                    {'controller': phUpController, 'name': 'pH_up'},
+                    {'controller': phDownController, 'name': 'pH_down'},
+                  ];
+
+                  for (var update in updates) {
+                    final controller =
+                        update['controller'] as TextEditingController;
+                    final name = update['name'] as String;
+                    if (controller.text.isNotEmpty) {
+                      final value = int.tryParse(controller.text);
+                      if (value != null) {
+                        await supabase.from('container_capacity').update(
+                            {'capacity': value}).eq('container_name', name);
+                      }
+                    }
+                  }
+                  if (mounted) {
+                    setState(() {
+                      Navigator.of(context).pop();
+                    });
+                  }
+                }
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<List<Map<String, dynamic>>>(
+      stream: _stream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<Map<String, dynamic>> capacityData = snapshot.data!;
+          return _buildChart(capacityData);
+        }
+        return const Loader();
+      },
+    );
+  }
+
+  Widget _buildChart(List<Map<String, dynamic>> data) {
     return Container(
-      height: 280,
+      height: 300,
       decoration: BoxDecoration(
         color: AppPallete.whiteColor,
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
@@ -40,34 +154,48 @@ class _AnalyticsCapacityGraphState extends State<AnalyticsCapacityGraph> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Container Capacity',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                letterSpacing: -1,
-              ),
+            Row(
+              children: [
+                const Text(
+                  'Container Capacity',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -1,
+                  ),
+                ),
+                const Spacer(flex: 1),
+                TextButton(
+                  onPressed: () => _showRefillDialog(context),
+                  child: const Text(
+                    'Refill',
+                    style: TextStyle(
+                      color: AppPallete.textColorBlack,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 18),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: data.sublist(0, 2).map((entry) {
+                  children: data.sublist(0, data.length ~/ 2).map((entry) {
                     return _CapacityItem(
-                      label: entry['label'] as String,
-                      value: entry['value'] as int,
+                      label: labelMapping[entry['container_name']] as String,
+                      value: (entry['capacity'] as num).toInt(),
                       totalCapacity: totalCapacity,
                     );
                   }).toList(),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: data.sublist(2, 4).map((entry) {
+                  children: data.sublist(data.length ~/ 2).map((entry) {
                     return _CapacityItem(
-                      label: entry['label'] as String,
-                      value: entry['value'] as int,
+                      label: labelMapping[entry['container_name']] as String,
+                      value: (entry['capacity'] as num).toInt(),
                       totalCapacity: totalCapacity,
                     );
                   }).toList(),

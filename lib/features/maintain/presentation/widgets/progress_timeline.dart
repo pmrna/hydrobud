@@ -67,8 +67,13 @@ class _ProgressTimelineState extends State<ProgressTimeline> {
   String _transformLiquidType(String liquidType) {
     switch (liquidType) {
       case 'pH UP':
-        return 'Maintaining pH value';
-      // Add more cases as needed for other liquid types
+        return 'Maintaining pH value:\ndosed pH UP';
+      case 'pH DOWN':
+        return 'Maintaining pH value:\ndosed pH DOWN';
+      case 'SOLUTION A':
+        return 'Maintaining nutrient solution:\ndosed solution A';
+      case 'SOLUTION B':
+        return 'Maintaining nutrient solution:\ndosed solution B';
       default:
         return liquidType;
     }
