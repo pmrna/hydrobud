@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hydrobud/core/common/widgets/banner_title.dart';
 import 'package:hydrobud/core/theme/pallete.dart';
 import 'package:hydrobud/core/common/widgets/header_text.dart';
-import 'package:hydrobud/features/analytics/presentation/widgets/logger_banner_title.dart';
 import 'package:hydrobud/features/irrigation/presentation/widgets/irrigation_text_field.dart';
+import 'package:hydrobud/features/maintain/presentation/widgets/progress_timeline.dart';
 import 'package:hydrobud/features/maintain/repositories/maintain_preset_repository_impl.dart';
 import 'package:hydrobud/features/irrigation/domain/entities/lettuce_preset.dart';
+import 'package:hydrobud/features/navigation/presentation/pages/logger_page.dart';
+import 'package:hydrobud/features/navigation/presentation/pages/wrapper.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:intl/intl.dart';
 
 class MaintainPage extends StatefulWidget {
   final VoidCallback onFabPressed;
+
   const MaintainPage({super.key, required this.onFabPressed});
 
   @override
@@ -16,12 +22,21 @@ class MaintainPage extends StatefulWidget {
 
 class _MaintainPageState extends State<MaintainPage> {
   final _formKey = GlobalKey<FormState>();
-  final _phLevelController = TextEditingController(text: '6.0');
-  final _waterConcentrationController = TextEditingController(text: '1.5');
-  final _waterTemperatureController = TextEditingController(text: '24.0');
-  final _litersOfWaterController = TextEditingController(text: '70');
+
+  final _phLevelController = TextEditingController();
+  final _waterConcentrationController = TextEditingController();
+  final _waterTemperatureController = TextEditingController();
+  final _litersOfWaterController = TextEditingController();
+
+  String _transplantDateDisplay = '';
 
   final _repository = MaintainRepositoryImpl();
+
+  @override
+  void initState() {
+    super.initState();
+    _setValuesFromDB();
+  }
 
   @override
   void dispose() {
@@ -43,11 +58,76 @@ class _MaintainPageState extends State<MaintainPage> {
 
       try {
         await _repository.savePreset(preset);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Preset saved successfully')),
+          );
+        }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to save preset: $e')),
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to save preset: $e')),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> _setValuesFromDB() async {
+    final supabase = Supabase.instance.client;
+    final response = await supabase.from('irrigation_presets').select(
+        'transplant_date, ph_level, water_concentration, water_temperature, liters_of_water');
+
+    final transplantDate = DateTime.parse(response[0]['transplant_date']);
+
+    if (mounted) {
+      setState(() {
+        _transplantDateDisplay =
+            DateFormat.yMMMMd('en_US').format(transplantDate).toString();
+
+        _phLevelController.text = response[0]['ph_level'].toString();
+        _waterConcentrationController.text =
+            response[0]['water_concentration'].toString();
+        _waterTemperatureController.text =
+            response[0]['water_temperature'].toString();
+        _litersOfWaterController.text =
+            response[0]['liters_of_water'].toString();
+      });
+    }
+  }
+
+  Future<void> _onCancel() async {
+    final supabase = Supabase.instance.client;
+
+    await supabase
+        .from('irrigation_presets')
+        .update({'is_ongoing': false}).eq('id', 1);
+
+    if (mounted) {
+      setState(() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Wrapper()),
+        );
+      });
+    }
+  }
+
+  Future<void> _proceed() async {
+    final supabase = Supabase.instance.client;
+
+    try {
+      await supabase.from('irrigation_presets').update(
+          {'harvest_date': DateTime.timestamp().toString()}).eq('id', 1);
+
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LoggerPage()),
         );
       }
+    } catch (error) {
+      debugPrint('Error updating transplant_date: $error');
     }
   }
 
@@ -57,42 +137,65 @@ class _MaintainPageState extends State<MaintainPage> {
       appBar: AppBar(
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_sharp),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).push(MaterialPageRoute<void>(
+              builder: (BuildContext context) => const Wrapper(),
+            ));
           },
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              _onCancel();
+            },
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                color: AppPallete.textColorBlack,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
       resizeToAvoidBottomInset: true,
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            const SizedBox(height: 20),
+            const HeaderText(
+              text: "Maintaining",
+            ),
+            const SizedBox(height: 30),
+            const BannerTitle(
+              text: 'Lettuce',
+              imagePath: 'lib/core/assets/images/lettuce_bg.jpg',
+            ),
+            const SizedBox(height: 25),
+            const Text(
+              'Transplant Date',
+              style: TextStyle(
+                color: AppPallete.textColorBlack3,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.start,
+            ),
+            Text(
+              _transplantDateDisplay,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 35),
+            Row(
               children: [
-                const Center(
-                  child: HeaderText(
-                    text: "Maintaining",
-                  ),
-                ),
-                const SizedBox(height: 22),
-                const Text(
-                  'Transplant Data',
-                  textAlign: TextAlign.end,
-                ),
-                const Text(
-                  'June 07, 2024',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 35),
-                const BannerTitle(),
-                const SizedBox(height: 35),
                 const Text(
                   'Maintainance Settings',
                   style: TextStyle(
@@ -100,70 +203,94 @@ class _MaintainPageState extends State<MaintainPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 30),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        labelText: 'pH Level',
-                        backgroundColor: Colors.green.shade50,
-                        borderColor: Colors.green,
-                        controller: _phLevelController,
+                const Spacer(flex: 1),
+                TextButton(
+                    onPressed: () {
+                      _savePreset();
+                      debugPrint('data uploaded');
+                    },
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppPallete.textColorBlack,
                       ),
-                    ),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                      child: CustomTextField(
-                        labelText: 'Water Concentration',
-                        backgroundColor: Colors.yellow.shade50,
-                        borderColor: Colors.yellow,
-                        controller: _waterConcentrationController,
-                      ),
-                    ),
-                  ],
+                    )),
+              ],
+            ),
+            const SizedBox(height: 30),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomTextField(
+                    hintText: 'Enter pH level',
+                    labelText: 'PH Level',
+                    backgroundColor: WidgetPallete.greenAccent1,
+                    borderColor: WidgetPallete.greenAccent2,
+                    controller: _phLevelController,
+                  ),
                 ),
-                const SizedBox(height: 16.0),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        labelText: 'Water Temperature',
-                        backgroundColor: Colors.red.shade50,
-                        borderColor: Colors.red,
-                        controller: _waterTemperatureController,
-                      ),
-                    ),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                      child: CustomTextField(
-                        labelText: 'Liters of Water',
-                        backgroundColor: Colors.blue.shade50,
-                        borderColor: Colors.blue,
-                        controller: _litersOfWaterController,
-                      ),
-                    ),
-                  ],
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: CustomTextField(
+                    hintText: 'Enter EC value',
+                    labelText: 'Water concentration',
+                    backgroundColor: WidgetPallete.yellowAccent,
+                    borderColor: WidgetPallete.yellowstroke,
+                    controller: _waterConcentrationController,
+                  ),
                 ),
               ],
             ),
-          ),
+            const SizedBox(height: 16.0),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomTextField(
+                    hintText: 'Enter temperature',
+                    labelText: 'Water temperature',
+                    backgroundColor: WidgetPallete.pinkAccent,
+                    borderColor: WidgetPallete.pinkStroke,
+                    controller: _waterTemperatureController,
+                  ),
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: CustomTextField(
+                    hintText: 'Enter liters of water',
+                    labelText: 'Liters of water',
+                    backgroundColor: WidgetPallete.blueAccent,
+                    borderColor: WidgetPallete.blueStroke,
+                    controller: _litersOfWaterController,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            const Text(
+              'Progress Timeline',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppPallete.textColorBlack),
+            ),
+            const SizedBox(height: 20),
+            const ProgressTimeline(),
+            const SizedBox(height: 120),
+          ],
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 16.0, right: 16.0),
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            _savePreset();
-            debugPrint('data uploaded');
-            widget.onFabPressed();
-          },
-          label: const Text('Proceed', style: TextStyle(color: Colors.white)),
-          icon: const Icon(
-            Icons.check,
-            color: Colors.white,
-          ),
-          backgroundColor: AppPallete.foregroundColor,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          _proceed();
+        },
+        label: const Text('Proceed', style: TextStyle(color: Colors.white)),
+        icon: const Icon(
+          Icons.check,
+          color: Colors.white,
         ),
+        backgroundColor: AppPallete.foregroundColor,
       ),
     );
   }

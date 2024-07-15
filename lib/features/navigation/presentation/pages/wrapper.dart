@@ -4,30 +4,32 @@ import 'package:hydrobud/features/navigation/presentation/pages/analytics_page.d
 import 'package:hydrobud/features/navigation/presentation/pages/dashboard_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/history_page.dart';
 import 'package:hydrobud/features/navigation/presentation/pages/irrigation_page.dart';
-import 'package:hydrobud/features/navigation/presentation/pages/logger_page.dart';
+// import 'package:hydrobud/features/navigation/presentation/pages/logger_page.dart';
 import 'package:hydrobud/features/navigation/presentation/widgets/bottom_navbar_widget.dart';
 
 class Wrapper extends StatefulWidget {
-  const Wrapper({super.key});
+  final int initialIndex;
+  const Wrapper({super.key, this.initialIndex = 0});
 
   @override
   State<Wrapper> createState() => _WrapperState();
 }
 
 class _WrapperState extends State<Wrapper> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.initialIndex;
     _pages = <Widget>[
       const DashboardPage(),
       const HistoryPage(),
       IrrigationPage(onFabPressed: _changeToMaintainPage),
       const AnalyticsPage(),
-      const LoggerPage(),
+      //const LoggerPage(),
     ];
   }
 

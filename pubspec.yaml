@@ -67,19 +67,11 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/core/assets/images/analytics_bg.jpg
-    - lib/core/assets/images/logger_bg.jpg
-    - lib/core/assets/images/irrigation_bg.jpg
-    - lib/core/assets/images/lettuce_bg.jpg
-    - lib/core/assets/images/talong.jpg
-    - lib/core/assets/images/bill_pipper.jpg
-    - lib/core/assets/images/plant_asset.png
-    - lib/core/assets/images/letus-rec.png
-    - lib/core/assets/mascot/mascot.png
-    - lib/core/assets/icons/analytics_icon.png
-    - lib/core/assets/icons/dashboard_icon.png
-    - lib/core/assets/icons/history_icon.png
-    - lib/core/assets/icons/irrigation_icon.png
+    - lib/core/assets/
+    - lib/core/assets/images/
+    - lib/core/assets/mascot/
+    - lib/core/assets/icons/
+
     - lib/.env
     - lib/main.dart
 

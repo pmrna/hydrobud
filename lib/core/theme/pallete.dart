@@ -6,6 +6,7 @@ class AppPallete {
   static const Color foregroundColor = Color(0xFFA4C037);
   static const Color textColorBlack = Color(0xFF333333);
   static const Color textColorBlack2 = Color.fromARGB(131, 51, 51, 51);
+  static const Color textColorBlack3 = Color.fromARGB(185, 51, 51, 51);
   static const Color textColorWhite = Colors.white;
   static const Color textColorGreen = Color(0xFFA4C037);
   static const Color textColorGreen2 = Color(0xFF89AD00);
@@ -13,6 +14,7 @@ class AppPallete {
   static const Color errorColor = Colors.redAccent;
   static const Color focusColor = Colors.black;
   static const Color unfocusColor = Color.fromRGBO(0, 0, 0, 0.5);
+  static const Color whiteColor = Color(0xFFEEEEEE);
 }
 
 class WidgetPallete {
@@ -23,11 +25,12 @@ class WidgetPallete {
   static const Color greenAccent1 = Color(0xFFAEC74F);
   static const Color greenAccent2 = Color(0xFF6A8500);
   static const Color greenAccent3 = Color(0xFFA3BF36);
+  static const Color greenAccent4 = Color(0xFFD1DEA3);
   static const Color yellowAccent = Color(0xFFEEC533);
   static const Color pinkAccent = Color(0xFFFD76C7);
   static const Color blueAccent = Color(0xFF7F7CF2);
   static const Color bannerBorderColor = Color(0xFFA3BF36);
-  static const Color graphContainerColor = Color(0xFFD1DEA3);
   static const Color greenGradient1 = Color(0xFF718429); // stops at 0%
   static const Color greenGradient2 = Color(0xFFA4C037); // stops at 89% and 25%
+  static const Color dividerColor = Color.fromARGB(160, 130, 130, 130);
 }

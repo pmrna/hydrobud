@@ -8,22 +8,19 @@ import 'package:hydrobud/features/navigation/presentation/pages/wrapper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 
-class LoggerPage extends StatefulWidget {
-  const LoggerPage({super.key});
+class HistoryLoggerPage extends StatefulWidget {
+  final int id;
+  const HistoryLoggerPage({super.key, required this.id});
 
   @override
-  State<LoggerPage> createState() => _LoggerPageState();
+  State<HistoryLoggerPage> createState() => _HistoryLoggerPageState();
 }
 
-class _LoggerPageState extends State<LoggerPage> {
-  final numberOfHarvestController = TextEditingController();
-  final totalWeightController = TextEditingController();
-  final totalSalesController = TextEditingController();
-  final numberOfTransplantController = TextEditingController();
-
-  final Map<String, dynamic> _irrigationPreset = {};
-
-  int _harvestId = 0;
+class _HistoryLoggerPageState extends State<HistoryLoggerPage> {
+  final _numberOfHarvestController = TextEditingController();
+  final _totalWeightController = TextEditingController();
+  final _totalSalesController = TextEditingController();
+  final _numberOfTransplantController = TextEditingController();
 
   String _transplantDateDisplay = '';
   String _harvestDateDisplay = '';
@@ -35,22 +32,15 @@ class _LoggerPageState extends State<LoggerPage> {
     _setValuesFromDB();
   }
 
-  Future<void> _insertData() async {
+  Future<void> _updateData() async {
     final supabase = Supabase.instance.client;
 
-    await supabase.from('log_data').insert({
-      'total_harvests': numberOfHarvestController.text,
-      'total_weight': totalWeightController.text,
-      'total_sales': totalSalesController.text,
-      'transplanted_crops': numberOfTransplantController.text,
-      'transplant_date': _irrigationPreset['transplant_date'],
-      'harvest_date': _irrigationPreset['harvest_date'],
-      'crop_name': _irrigationPreset['crop_name'],
-    });
-
-    await supabase
-        .from('irrigation_presets')
-        .update({'is_ongoing': false}).eq('id', 1);
+    await supabase.from('log_data').update({
+      'total_harvests': _numberOfHarvestController.text,
+      'total_weight': _totalWeightController.text,
+      'total_sales': _totalSalesController.text,
+      'transplanted_crops': _numberOfTransplantController.text,
+    }).eq('id', widget.id);
 
     if (mounted) {
       setState(() {
@@ -64,21 +54,16 @@ class _LoggerPageState extends State<LoggerPage> {
 
   Future<void> _setValuesFromDB() async {
     final supabase = Supabase.instance.client;
-    final irrigationData = await supabase
-        .from('irrigation_presets')
-        .select('transplant_date, harvest_date, crop_name');
+    final logData =
+        await supabase.from('log_data').select().eq('id', widget.id);
 
-    final logData = await supabase.from('log_data').count(CountOption.exact);
-
-    debugPrint(logData.toString());
-
-    final transplantDate = DateTime.parse(irrigationData[0]['transplant_date']);
-    final harvestDate = DateTime.parse(irrigationData[0]['harvest_date']);
-    final cropName = irrigationData[0]['crop_name'];
-
-    _irrigationPreset['transplant_date'] = transplantDate.toString();
-    _irrigationPreset['harvest_date'] = harvestDate.toString();
-    _irrigationPreset['crop_name'] = cropName.toString();
+    final transplantDate = DateTime.parse(logData[0]['transplant_date']);
+    final harvestDate = DateTime.parse(logData[0]['harvest_date']);
+    final cropName = logData[0]['crop_name'];
+    final numberOfHarvests = logData[0]['total_harvests'];
+    final totalWeight = logData[0]['total_weight'];
+    final totalSales = logData[0]['total_sales'];
+    final numberOfTransplants = logData[0]['transplanted_crops'];
 
     if (mounted) {
       setState(() {
@@ -86,10 +71,11 @@ class _LoggerPageState extends State<LoggerPage> {
             DateFormat.yMMMMd('en_US').format(transplantDate).toString();
         _harvestDateDisplay =
             DateFormat.yMMMMd('en_US').format(harvestDate).toString();
-
         _cropNameDisplay = cropName;
-
-        _harvestId = logData + 1;
+        _numberOfHarvestController.text = numberOfHarvests.toString();
+        _totalWeightController.text = totalWeight.toString();
+        _totalSalesController.text = totalSales.toString();
+        _numberOfTransplantController.text = numberOfTransplants.toString();
       });
     }
   }
@@ -146,38 +132,38 @@ class _LoggerPageState extends State<LoggerPage> {
           const SizedBox(height: 35),
           LoggerBannerTitle(
             cropName: _cropNameDisplay,
-            id: _harvestId,
+            id: widget.id,
           ),
           const SizedBox(height: 30),
           const TextLabel(text: 'Total number of harvest', size: 16),
           LoggerInputField(
             hintText: 'Total number of harvested crops',
-            controller: numberOfHarvestController,
+            controller: _numberOfHarvestController,
           ),
           const SizedBox(height: 25),
           const TextLabel(text: 'Total weight of harvest (kg)', size: 16),
           LoggerInputField(
             hintText: 'Total weight of harvested crops',
-            controller: totalWeightController,
+            controller: _totalWeightController,
           ),
           const SizedBox(height: 25),
           const TextLabel(
               text: 'Total amount of sales for this harvest (₱)', size: 16),
           LoggerInputField(
             hintText: 'Total sales for this harvest',
-            controller: totalSalesController,
+            controller: _totalSalesController,
           ),
           const SizedBox(height: 25),
           const TextLabel(text: 'Number of transplanted crops', size: 16),
           LoggerInputField(
             hintText: 'Total number of harvested crops',
-            controller: numberOfTransplantController,
+            controller: _numberOfTransplantController,
           ),
           const SizedBox(height: 150), // for scrolling, change value later,
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _insertData,
+        onPressed: _updateData,
         backgroundColor: AppPallete.foregroundColor,
         child: const Icon(
           Icons.check,
