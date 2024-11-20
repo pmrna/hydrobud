@@ -12,8 +12,8 @@
 
 #define WIFI_SSID "TEST SERVER"
 #define WIFI_PASSWORD "223501070090"
-#define API_KEY "AIzaSyA9czQcqDMERmwOTEmlym_2o5aLv_sxZPg"
-#define DATABASE_URL "https://esp32---firebase-f998d-default-rtdb.asia-southeast1.firebasedatabase.app/"
+#define API_KEY "" // DB API_KEY
+#define DATABASE_URL "" 
 
 // TEMPERATURE SENSOR
 #define ONE_WIRE_BUS 32
